@@ -1,0 +1,275 @@
+<template>
+    <div class="slds-form-element">
+        <!-- Basic Information Section -->
+        <div class="slds-section">
+            <div class="slds-section__title" onclick={toggleSection} data-section="showBasicInfo">
+                <h3 class="slds-text-heading_medium">Basic Information</h3>
+                <lightning-icon icon-name="utility:chevronright" size="small" class="slds-section__controls"></lightning-icon>
+            </div>
+            <div class="slds-section__content" if:true={showBasicInfo}>
+                <lightning-combobox
+                    label="Operation Type"
+                    value={formData.operationType}
+                    options={[
+                        { label: 'Create', value: 'create' },
+                        { label: 'Update', value: 'update' }
+                    ]}
+                    onchange={handleInputChange}
+                    data-field="operationType">
+                </lightning-combobox>
+
+                <lightning-combobox
+                    label="Operation Mode"
+                    value={formData.operationMode}
+                    options={[
+                        { label: 'Single', value: 'single' },
+                        { label: 'Batch', value: 'batch' }
+                    ]}
+                    onchange={handleInputChange}
+                    data-field="operationMode">
+                </lightning-combobox>
+
+                <lightning-input
+                    label="Order ID"
+                    value={formData.orderId}
+                    onchange={handleInputChange}
+                    data-field="orderId">
+                </lightning-input>
+
+                <lightning-input
+                    label="Order Number"
+                    value={formData.orderNumber}
+                    onchange={handleInputChange}
+                    data-field="orderNumber">
+                </lightning-input>
+
+                <lightning-input
+                    label="Order Key"
+                    value={formData.orderKey}
+                    onchange={handleInputChange}
+                    data-field="orderKey">
+                </lightning-input>
+
+                <lightning-combobox
+                    label="Order Status"
+                    value={formData.orderStatus}
+                    options={orderStatusOptions}
+                    onchange={handleInputChange}
+                    data-field="orderStatus">
+                </lightning-combobox>
+            </div>
+        </div>
+
+        <!-- Customer Information Section -->
+        <div class="slds-section">
+            <div class="slds-section__title" onclick={toggleSection} data-section="showCustomerInfo">
+                <h3 class="slds-text-heading_medium">Customer Information</h3>
+                <lightning-icon icon-name="utility:chevronright" size="small" class="slds-section__controls"></lightning-icon>
+            </div>
+            <div class="slds-section__content" if:true={showCustomerInfo}>
+                <lightning-input
+                    label="Customer ID"
+                    value={formData.customerId}
+                    onchange={handleInputChange}
+                    data-field="customerId">
+                </lightning-input>
+
+                <lightning-input
+                    label="Customer Email"
+                    type="email"
+                    value={formData.customerEmail}
+                    onchange={handleInputChange}
+                    data-field="customerEmail">
+                </lightning-input>
+            </div>
+        </div>
+
+        <!-- Billing Information Section -->
+        <div class="slds-section">
+            <div class="slds-section__title" onclick={toggleSection} data-section="showBillingInfo">
+                <h3 class="slds-text-heading_medium">Billing Information</h3>
+                <lightning-icon icon-name="utility:chevronright" size="small" class="slds-section__controls"></lightning-icon>
+            </div>
+            <div class="slds-section__content" if:true={showBillingInfo}>
+                <lightning-input
+                    label="Bill To Name"
+                    value={formData.billToName}
+                    onchange={handleInputChange}
+                    data-field="billToName">
+                </lightning-input>
+
+                <lightning-input
+                    label="Bill To Company"
+                    value={formData.billToCompany}
+                    onchange={handleInputChange}
+                    data-field="billToCompany">
+                </lightning-input>
+
+                <lightning-input-address
+                    label="Bill To Address"
+                    address-label="Bill To"
+                    street={formData.billToAddress1}
+                    city={formData.billToCity}
+                    country={formData.billToCountry}
+                    province={formData.billToState}
+                    postal-code={formData.billToZip}
+                    onchange={handleAddressChange}
+                    data-type="billing">
+                </lightning-input-address>
+
+                <lightning-input
+                    label="Bill To Phone"
+                    type="tel"
+                    value={formData.billToPhone}
+                    onchange={handleInputChange}
+                    data-field="billToPhone">
+                </lightning-input>
+            </div>
+        </div>
+
+        <!-- Shipping Information Section -->
+        <div class="slds-section">
+            <div class="slds-section__title" onclick={toggleSection} data-section="showShippingInfo">
+                <h3 class="slds-text-heading_medium">Shipping Information</h3>
+                <lightning-icon icon-name="utility:chevronright" size="small" class="slds-section__controls"></lightning-icon>
+            </div>
+            <div class="slds-section__content" if:true={showShippingInfo}>
+                <lightning-input
+                    label="Ship To Name"
+                    value={formData.shipToName}
+                    onchange={handleInputChange}
+                    data-field="shipToName">
+                </lightning-input>
+
+                <lightning-input
+                    label="Ship To Company"
+                    value={formData.shipToCompany}
+                    onchange={handleInputChange}
+                    data-field="shipToCompany">
+                </lightning-input>
+
+                <lightning-input-address
+                    label="Ship To Address"
+                    address-label="Ship To"
+                    street={formData.shipToAddress1}
+                    city={formData.shipToCity}
+                    country={formData.shipToCountry}
+                    province={formData.shipToState}
+                    postal-code={formData.shipToZip}
+                    onchange={handleAddressChange}
+                    data-type="shipping">
+                </lightning-input-address>
+
+                <lightning-input
+                    label="Ship To Phone"
+                    type="tel"
+                    value={formData.shipToPhone}
+                    onchange={handleInputChange}
+                    data-field="shipToPhone">
+                </lightning-input>
+            </div>
+        </div>
+
+        <!-- Payment Information Section -->
+        <div class="slds-section">
+            <div class="slds-section__title" onclick={toggleSection} data-section="showPaymentInfo">
+                <h3 class="slds-text-heading_medium">Payment Information</h3>
+                <lightning-icon icon-name="utility:chevronright" size="small" class="slds-section__controls"></lightning-icon>
+            </div>
+            <div class="slds-section__content" if:true={showPaymentInfo}>
+                <lightning-combobox
+                    label="Payment Method"
+                    value={formData.paymentMethod}
+                    options={[
+                        { label: 'Credit Card', value: 'credit_card' },
+                        { label: 'Bank Transfer', value: 'bank_transfer' },
+                        { label: 'Check', value: 'check' }
+                    ]}
+                    onchange={handleInputChange}
+                    data-field="paymentMethod">
+                </lightning-combobox>
+
+                <lightning-input
+                    label="Payment Amount"
+                    type="number"
+                    value={formData.paymentAmount}
+                    onchange={handleInputChange}
+                    data-field="paymentAmount">
+                </lightning-input>
+
+                <lightning-combobox
+                    label="Shipping Service"
+                    value={formData.shippingService}
+                    options={[
+                        { label: 'Standard', value: 'standard' },
+                        { label: 'Express', value: 'express' },
+                        { label: 'Next Day', value: 'next_day' }
+                    ]}
+                    onchange={handleInputChange}
+                    data-field="shippingService">
+                </lightning-combobox>
+
+                <lightning-input
+                    label="Shipping Amount"
+                    type="number"
+                    value={formData.shippingAmount}
+                    onchange={handleInputChange}
+                    data-field="shippingAmount">
+                </lightning-input>
+
+                <lightning-input
+                    label="Tax Amount"
+                    type="number"
+                    value={formData.taxAmount}
+                    onchange={handleInputChange}
+                    data-field="taxAmount">
+                </lightning-input>
+
+                <lightning-input
+                    label="Insurance Amount"
+                    type="number"
+                    value={formData.insuranceAmount}
+                    onchange={handleInputChange}
+                    data-field="insuranceAmount">
+                </lightning-input>
+            </div>
+        </div>
+
+        <!-- Advanced Options Section -->
+        <div class="slds-section">
+            <div class="slds-section__title" onclick={toggleSection} data-section="showAdvancedOptions">
+                <h3 class="slds-text-heading_medium">Advanced Options</h3>
+                <lightning-icon icon-name="utility:chevronright" size="small" class="slds-section__controls"></lightning-icon>
+            </div>
+            <div class="slds-section__content" if:true={showAdvancedOptions}>
+                <lightning-textarea
+                    label="International Options"
+                    value={formData.internationalOptions}
+                    onchange={handleInputChange}
+                    data-field="internationalOptions">
+                </lightning-textarea>
+
+                <lightning-textarea
+                    label="Advanced Options"
+                    value={formData.advancedOptions}
+                    onchange={handleInputChange}
+                    data-field="advancedOptions">
+                </lightning-textarea>
+            </div>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="slds-m-top_medium">
+            <lightning-button
+                label="Save"
+                variant="brand"
+                onclick={handleSave}>
+            </lightning-button>
+            <lightning-button
+                label="Cancel"
+                variant="neutral"
+                onclick={handleCancel}>
+            </lightning-button>
+        </div>
+    </div>
+</template> 

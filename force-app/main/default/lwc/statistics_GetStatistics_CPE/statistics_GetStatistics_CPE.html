@@ -1,0 +1,77 @@
+<template>
+    <div class="slds-form-element">
+        <div class="slds-section">
+            <div class="slds-section__title">
+                <h3 class="slds-text-heading_medium">Statistics Configuration</h3>
+            </div>
+            <div class="slds-section__content">
+                <lightning-input
+                    type="date"
+                    label="Start Date"
+                    value={localConfig.startDate}
+                    onchange={handleDateChange}
+                    data-field="startDate">
+                </lightning-input>
+
+                <lightning-input
+                    type="date"
+                    label="End Date"
+                    value={localConfig.endDate}
+                    onchange={handleDateChange}
+                    data-field="endDate">
+                </lightning-input>
+
+                <lightning-combobox
+                    label="Metrics"
+                    value={localConfig.metrics}
+                    options={[
+                        { label: 'Total Orders', value: 'total_orders' },
+                        { label: 'Total Revenue', value: 'total_revenue' },
+                        { label: 'Average Order Value', value: 'avg_order_value' },
+                        { label: 'Order Count', value: 'order_count' }
+                    ]}
+                    onchange={handleMetricChange}
+                    multiple>
+                </lightning-combobox>
+
+                <lightning-combobox
+                    label="Dimensions"
+                    value={localConfig.dimensions}
+                    options={[
+                        { label: 'Date', value: 'date' },
+                        { label: 'Customer', value: 'customer' },
+                        { label: 'Product', value: 'product' },
+                        { label: 'Region', value: 'region' }
+                    ]}
+                    onchange={handleDimensionChange}
+                    multiple>
+                </lightning-combobox>
+
+                <lightning-combobox
+                    label="Filters"
+                    value={localConfig.filters}
+                    options={[
+                        { label: 'Status', value: 'status' },
+                        { label: 'Payment Method', value: 'payment_method' },
+                        { label: 'Shipping Method', value: 'shipping_method' }
+                    ]}
+                    onchange={handleFilterChange}
+                    multiple>
+                </lightning-combobox>
+            </div>
+        </div>
+
+        <div class="slds-m-top_medium">
+            <lightning-button
+                label="Save"
+                variant="brand"
+                onclick={handleSave}>
+            </lightning-button>
+            <lightning-button
+                label="Cancel"
+                variant="neutral"
+                onclick={handleCancel}>
+            </lightning-button>
+        </div>
+    </div>
+</template> 

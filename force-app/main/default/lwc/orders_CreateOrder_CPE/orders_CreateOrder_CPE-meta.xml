@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<LightningComponentBundle xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>63.0</apiVersion>
+    <isExposed>true</isExposed>
+    <targets>
+        <target>lightning__FlowScreen</target>
+    </targets>
+    <targetConfigs>
+        <targetConfig targets="lightning__FlowScreen">
+            <property name="operationType" type="String" label="Operation Type" required="true" default="create"/>
+            <property name="operationMode" type="String" label="Operation Mode" required="true" default="single"/>
+            <property name="orderId" type="String" label="Order ID" required="false"/>
+            <property name="orderNumber" type="String" label="Order Number" required="false"/>
+            <property name="orderKey" type="String" label="Order Key" required="false"/>
+            <property name="orderStatus" type="String" label="Order Status" required="true"/>
+            <property name="customerId" type="String" label="Customer ID" required="true"/>
+            <property name="customerEmail" type="String" label="Customer Email" required="true"/>
+            <property name="billToName" type="String" label="Bill To Name" required="true"/>
+            <property name="billToCompany" type="String" label="Bill To Company" required="false"/>
+            <property name="billToAddress1" type="String" label="Bill To Address 1" required="true"/>
+            <property name="billToAddress2" type="String" label="Bill To Address 2" required="false"/>
+            <property name="billToCity" type="String" label="Bill To City" required="true"/>
+            <property name="billToState" type="String" label="Bill To State" required="true"/>
+            <property name="billToZip" type="String" label="Bill To ZIP" required="true"/>
+            <property name="billToCountry" type="String" label="Bill To Country" required="true"/>
+            <property name="billToPhone" type="String" label="Bill To Phone" required="false"/>
+            <property name="shipToName" type="String" label="Ship To Name" required="true"/>
+            <property name="shipToCompany" type="String" label="Ship To Company" required="false"/>
+            <property name="shipToAddress1" type="String" label="Ship To Address 1" required="true"/>
+            <property name="shipToAddress2" type="String" label="Ship To Address 2" required="false"/>
+            <property name="shipToCity" type="String" label="Ship To City" required="true"/>
+            <property name="shipToState" type="String" label="Ship To State" required="true"/>
+            <property name="shipToZip" type="String" label="Ship To ZIP" required="true"/>
+            <property name="shipToCountry" type="String" label="Ship To Country" required="true"/>
+            <property name="shipToPhone" type="String" label="Ship To Phone" required="false"/>
+            <property name="paymentMethod" type="String" label="Payment Method" required="true"/>
+            <property name="paymentAmount" type="Decimal" label="Payment Amount" required="true"/>
+            <property name="shippingService" type="String" label="Shipping Service" required="true"/>
+            <property name="shippingAmount" type="Decimal" label="Shipping Amount" required="true"/>
+            <property name="taxAmount" type="Decimal" label="Tax Amount" required="true"/>
+            <property name="insuranceAmount" type="Decimal" label="Insurance Amount" required="false"/>
+            <property name="internationalOptions" type="String" label="International Options" required="false"/>
+            <property name="advancedOptions" type="String" label="Advanced Options" required="false"/>
+        </targetConfig>
+    </targetConfigs>
+</LightningComponentBundle> 

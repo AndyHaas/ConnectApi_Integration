@@ -1,0 +1,37 @@
+.slds-section {
+    margin-bottom: 1rem;
+    border: 1px solid #dddbda;
+    border-radius: 0.25rem;
+}
+
+.slds-section__title {
+    padding: 0.75rem;
+    background-color: #f3f2f2;
+    border-bottom: 1px solid #dddbda;
+}
+
+.slds-section__content {
+    padding: 1rem;
+}
+
+.slds-form-element {
+    margin-bottom: 1rem;
+}
+
+.slds-m-top_medium {
+    margin-top: 1rem;
+    display: flex;
+    gap: 0.5rem;
+    justify-content: flex-end;
+}
+
+/* Error styling */
+.slds-has-error .slds-input {
+    border-color: #c23934;
+}
+
+.slds-has-error .slds-form-element__help {
+    color: #c23934;
+    font-size: 0.75rem;
+    margin-top: 0.25rem;
+} 
