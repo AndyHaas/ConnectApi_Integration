@@ -247,19 +247,8 @@ public class LacoreConnectService extends RestClientLib {
     }
     
     // Brand Operations
-    public static ApiResponse getBrand(String brandId) {
-        return handleResponse(getInstance().get('/brands/' + brandId));
-    }
-    
-    public static ApiResponse listBrands(Integer page, Integer pageSize, String sortBy, String sortDir) {
-        String endpoint = '/brands';
-        String queryString = HttpUtils.buildQueryString(new Map<String, String>{
-            'page' => String.valueOf(page),
-            'pageSize' => String.valueOf(pageSize),
-            'sortBy' => sortBy,
-            'sortDir' => sortDir
-        });
-        return handleResponse(getInstance().get(endpoint + queryString));
+    public static ApiResponse getBrand() {
+        return handleResponse(getInstance().get('/brands'));
     }
     
     public static ApiResponse getProductStatistics(StatisticsRequestDto request) {
