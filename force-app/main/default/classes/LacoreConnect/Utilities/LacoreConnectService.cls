@@ -269,4 +269,46 @@ public class LacoreConnectService extends RestClientLib {
         
         return handleResponse(getInstance().post(endpoint, body));
     }
+    
+    // Storefront Product Operations
+    public static ApiResponse getStorefrontProducts(String storefrontId, String sku, Integer page, Integer pageSize, String sortDir) {
+        String endpoint = '/storefrontProducts';
+        Map<String, String> queryParams = new Map<String, String>();
+        
+        // Add optional parameters if they are not null
+        if (String.isNotBlank(storefrontId)) {
+            queryParams.put('storefrontId', storefrontId);
+        }
+        if (String.isNotBlank(sku)) {
+            queryParams.put('sku', sku);
+        }
+        if (page != null) {
+            queryParams.put('page', String.valueOf(page));
+        }
+        if (pageSize != null) {
+            queryParams.put('pageSize', String.valueOf(pageSize));
+        }
+        if (String.isNotBlank(sortDir)) {
+            queryParams.put('sortDir', sortDir);
+        }
+        
+        String queryString = HttpUtils.buildQueryString(queryParams);
+        return handleResponse(getInstance().get(endpoint + queryString));
+    }
+    
+    public static ApiResponse getStorefrontProductById(String id) {
+        return handleResponse(getInstance().get('/storefrontProducts/' + id));
+    }
+    
+    public static ApiResponse createStorefrontProduct(StorefrontProductDto product) {
+        return handleResponse(getInstance().post('/storefrontProducts', DTOs.serialize(product)));
+    }
+    
+    public static ApiResponse updateStorefrontProduct(String id, StorefrontProductDto product) {
+        return handleResponse(getInstance().put('/storefrontProducts/' + id, DTOs.serialize(product)));
+    }
+    
+    public static ApiResponse deleteStorefrontProduct(String id) {
+        return handleResponse(getInstance().del('/storefrontProducts/' + id));
+    }
 } 
