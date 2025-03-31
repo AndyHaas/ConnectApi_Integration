@@ -311,4 +311,28 @@ public class LacoreConnectService extends RestClientLib {
     public static ApiResponse deleteStorefrontProduct(String id) {
         return handleResponse(getInstance().del('/storefrontProducts/' + id));
     }
+    
+    // Storefront Operations
+    public static ApiResponse getStorefronts(Integer page, Integer pageSize, String sortDir) {
+        String endpoint = '/storefronts';
+        Map<String, String> queryParams = new Map<String, String>();
+        
+        // Add optional parameters if they are not null
+        if (page != null) {
+            queryParams.put('page', String.valueOf(page));
+        }
+        if (pageSize != null) {
+            queryParams.put('pageSize', String.valueOf(pageSize));
+        }
+        if (String.isNotBlank(sortDir)) {
+            queryParams.put('sortDir', sortDir);
+        }
+        
+        String queryString = HttpUtils.buildQueryString(queryParams);
+        return handleResponse(getInstance().get(endpoint + queryString));
+    }
+    
+    public static ApiResponse getStorefrontById(String id) {
+        return handleResponse(getInstance().get('/storefronts/' + id));
+    }
 } 
