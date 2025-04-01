@@ -559,4 +559,166 @@ private without sharing class LacoreConnectServiceTest {
         System.assertEquals(200, response.statusCode, 'Expected status code 200');
         System.assertEquals(true, response.isSuccess, 'Expected success response');
     }
+    
+    // Warehouse Shipment Tests
+    @IsTest
+    static void testListWarehouseShipments() {
+        Test.startTest();
+        LacoreConnectService.ApiResponse response = LacoreConnectService.listWarehouseShipments(
+            1,
+            10,
+            'createdAt',
+            'desc'
+        );
+        Test.stopTest();
+        
+        System.assertEquals(200, response.statusCode, 'Expected status code 200');
+        System.assertEquals(true, response.isSuccess, 'Expected success response');
+    }
+    
+    @IsTest
+    static void testGetWarehouseShipment() {
+        Test.startTest();
+        LacoreConnectService.ApiResponse response = LacoreConnectService.getWarehouseShipment('test-shipment-id');
+        Test.stopTest();
+        
+        System.assertEquals(200, response.statusCode, 'Expected status code 200');
+        System.assertEquals(true, response.isSuccess, 'Expected success response');
+    }
+    
+    @IsTest
+    static void testCreateWarehouseTransfer() {
+        Test.startTest();
+        
+        WarehouseShipmentCreateReq shipment = new WarehouseShipmentCreateReq();
+        shipment.fromWarehouseId = TEST_WAREHOUSE_ID;
+        shipment.toWarehouseId = 'test-destination-warehouse-id';
+        shipment.referenceNumber = 'TEST-TRANSFER-001';
+        shipment.expectedDateTimeUtc = System.now();
+        shipment.items = new List<WarehouseShipmentItemCreateReq>();
+        
+        WarehouseShipmentItemCreateReq item = new WarehouseShipmentItemCreateReq();
+        item.warehouseProductId = 'test-product-id';
+        item.quantity = 10;
+        item.lotNumber = 'LOT-001';
+        shipment.items.add(item);
+        
+        LacoreConnectService.ApiResponse response = LacoreConnectService.createWarehouseTransfer(shipment);
+        
+        Test.stopTest();
+        
+        System.assertEquals(200, response.statusCode, 'Expected status code 200');
+        System.assertEquals(true, response.isSuccess, 'Expected success response');
+    }
+    
+    @IsTest
+    static void testCreateASN() {
+        Test.startTest();
+        
+        WarehouseShipmentCreateReq shipment = new WarehouseShipmentCreateReq();
+        shipment.fromWarehouseId = TEST_WAREHOUSE_ID;
+        shipment.toWarehouseId = 'test-destination-warehouse-id';
+        shipment.referenceNumber = 'TEST-ASN-001';
+        shipment.expectedDateTimeUtc = System.now();
+        shipment.items = new List<WarehouseShipmentItemCreateReq>();
+        
+        WarehouseShipmentItemCreateReq item = new WarehouseShipmentItemCreateReq();
+        item.warehouseProductId = 'test-product-id';
+        item.quantity = 10;
+        item.lotNumber = 'LOT-001';
+        shipment.items.add(item);
+        
+        LacoreConnectService.ApiResponse response = LacoreConnectService.createASN(shipment);
+        
+        Test.stopTest();
+        
+        System.assertEquals(200, response.statusCode, 'Expected status code 200');
+        System.assertEquals(true, response.isSuccess, 'Expected success response');
+    }
+    
+    @IsTest
+    static void testConfirmShipmentReceived() {
+        Test.startTest();
+        
+        WarehouseShipmentConfirmReceivedReq confirmation = new WarehouseShipmentConfirmReceivedReq();
+        confirmation.receivedAtDateTimeUtc = System.now();
+        confirmation.items = new List<WarehouseShipmentItemConfirmReceivedReq>();
+        
+        WarehouseShipmentItemConfirmReceivedReq item = new WarehouseShipmentItemConfirmReceivedReq();
+        item.warehouseShipmentItemId = 'test-shipment-item-id';
+        item.quantityReceived = 10;
+        item.lotNumber = 'LOT-001';
+        confirmation.items.add(item);
+        
+        LacoreConnectService.ApiResponse response = LacoreConnectService.confirmShipmentReceived('test-shipment-id', confirmation);
+        
+        Test.stopTest();
+        
+        System.assertEquals(200, response.statusCode, 'Expected status code 200');
+        System.assertEquals(true, response.isSuccess, 'Expected success response');
+    }
+    
+    @IsTest
+    static void testMarkShipmentInTransit() {
+        Test.startTest();
+        
+        WarehouseShipmentMarkInTransitReq transitRequest = new WarehouseShipmentMarkInTransitReq();
+        transitRequest.inTransitDateTimeUtc = System.now();
+        transitRequest.carrier = 'Test Carrier';
+        transitRequest.trackingNumber = 'TEST-TRACK-001';
+        
+        LacoreConnectService.ApiResponse response = LacoreConnectService.markShipmentInTransit('test-shipment-id', transitRequest);
+        
+        Test.stopTest();
+        
+        System.assertEquals(200, response.statusCode, 'Expected status code 200');
+        System.assertEquals(true, response.isSuccess, 'Expected success response');
+    }
+    
+    @IsTest
+    static void testCancelShipment() {
+        Test.startTest();
+        
+        WarehouseShipmentCancelReq cancelRequest = new WarehouseShipmentCancelReq();
+        cancelRequest.cancelReason = 'Test cancellation reason';
+        
+        LacoreConnectService.ApiResponse response = LacoreConnectService.cancelShipment('test-shipment-id', cancelRequest);
+        
+        Test.stopTest();
+        
+        System.assertEquals(200, response.statusCode, 'Expected status code 200');
+        System.assertEquals(true, response.isSuccess, 'Expected success response');
+    }
+    
+    @IsTest
+    static void testListWarehouseShipmentsWithNullParams() {
+        Test.startTest();
+        LacoreConnectService.ApiResponse response = LacoreConnectService.listWarehouseShipments(
+            null,
+            null,
+            null,
+            null
+        );
+        Test.stopTest();
+        
+        System.assertEquals(200, response.statusCode, 'Expected status code 200');
+        System.assertEquals(true, response.isSuccess, 'Expected success response');
+    }
+    
+    @IsTest
+    static void testWarehouseShipmentErrorResponse() {
+        Test.startTest();
+        
+        // Set up mock to return error response
+        Test.setMock(HttpCalloutMock.class, new LacoreConnectServiceMock(400, 'Bad Request', '{"error":"invalid_request","message":"Invalid shipment data","details":["Invalid parameters"]}'));
+        
+        WarehouseShipmentCreateReq shipment = new WarehouseShipmentCreateReq();
+        LacoreConnectService.ApiResponse response = LacoreConnectService.createWarehouseTransfer(shipment);
+        
+        Test.stopTest();
+        
+        System.assertEquals(400, response.statusCode, 'Expected status code 400');
+        System.assertEquals(false, response.isSuccess, 'Expected error response');
+        System.assertEquals('Invalid shipment data', response.errorMessage, 'Expected error message');
+    }
 } 

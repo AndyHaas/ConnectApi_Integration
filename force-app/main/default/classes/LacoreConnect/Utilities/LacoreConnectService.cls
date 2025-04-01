@@ -324,4 +324,196 @@ public class LacoreConnectService extends RestClientLib {
     public static ApiResponse getStorefrontById(String id) {
         return handleResponse(getInstance().get('/storefronts/' + id));
     }
+    
+    public static ApiResponse getVendors() {
+        String endpoint = '/vendors';
+        
+        return handleResponse(getInstance().get(endpoint));
+    }
+    
+    // Warehouse Product Operations
+    public static ApiResponse getWarehouseProducts(String warehouseId, String sku, Integer page, Integer pageSize, String sortDir) {
+        String endpoint = '/warehouseProducts';
+        Map<String, String> queryParams = new Map<String, String>();
+        
+        // Add optional parameters if they are not null
+        if (String.isNotBlank(warehouseId)) {
+            queryParams.put('warehouseId', warehouseId);
+        }
+        if (String.isNotBlank(sku)) {
+            queryParams.put('sku', sku);
+        }
+        if (page != null) {
+            queryParams.put('page', String.valueOf(page));
+        }
+        if (pageSize != null) {
+            queryParams.put('pageSize', String.valueOf(pageSize));
+        }
+        if (String.isNotBlank(sortDir)) {
+            queryParams.put('sortDir', sortDir);
+        }
+        
+        String queryString = HttpUtils.buildQueryString(queryParams);
+        return handleResponse(getInstance().get(endpoint + queryString));
+    }
+    
+    public static ApiResponse getWarehouseProductById(String id) {
+        return handleResponse(getInstance().get('/warehouseProducts/' + id));
+    }
+    
+    public static ApiResponse createWarehouseProduct(WarehouseProductDto product) {
+        return handleResponse(getInstance().post('/warehouseProducts', DTOs.serialize(product)));
+    }
+    
+    public static ApiResponse updateWarehouseProduct(String id, WarehouseProductDto product) {
+        return handleResponse(getInstance().put('/warehouseProducts/' + id, DTOs.serialize(product)));
+    }
+    
+    public static ApiResponse deleteWarehouseProduct(String id) {
+        return handleResponse(getInstance().del('/warehouseProducts/' + id));
+    }
+    
+    public static ApiResponse getWarehouseProductInventoryByLocation(
+        String item,
+        String warehouseProductId,
+        String warehouseId,
+        String brandId,
+        String lpn,
+        String locationCode,
+        String lotNumber,
+        Integer page,
+        Integer pageSize,
+        String sortDir
+    ) {
+        String endpoint = '/warehouseProducts/inventory/byLocation';
+        
+        // Build query parameters
+        List<String> queryParams = new List<String>();
+        
+        if (String.isNotBlank(item)) {
+            queryParams.add('item=' + EncodingUtil.urlEncode(item, 'UTF-8'));
+        }
+        if (String.isNotBlank(warehouseProductId)) {
+            queryParams.add('warehouseProductId=' + EncodingUtil.urlEncode(warehouseProductId, 'UTF-8'));
+        }
+        if (String.isNotBlank(warehouseId)) {
+            queryParams.add('warehouseId=' + EncodingUtil.urlEncode(warehouseId, 'UTF-8'));
+        }
+        if (String.isNotBlank(brandId)) {
+            queryParams.add('brandId=' + EncodingUtil.urlEncode(brandId, 'UTF-8'));
+        }
+        if (String.isNotBlank(lpn)) {
+            queryParams.add('lpn=' + EncodingUtil.urlEncode(lpn, 'UTF-8'));
+        }
+        if (String.isNotBlank(locationCode)) {
+            queryParams.add('locationCode=' + EncodingUtil.urlEncode(locationCode, 'UTF-8'));
+        }
+        if (String.isNotBlank(lotNumber)) {
+            queryParams.add('lotNumber=' + EncodingUtil.urlEncode(lotNumber, 'UTF-8'));
+        }
+        if (page != null) {
+            queryParams.add('page=' + String.valueOf(page));
+        }
+        if (pageSize != null) {
+            queryParams.add('pageSize=' + String.valueOf(pageSize));
+        }
+        if (String.isNotBlank(sortDir)) {
+            queryParams.add('sortDir=' + EncodingUtil.urlEncode(sortDir, 'UTF-8'));
+        }
+        
+        // Add query parameters to endpoint if any exist
+        if (!queryParams.isEmpty()) {
+            endpoint += '?' + String.join(queryParams, '&');
+        }
+        
+        return handleResponse(getInstance().get(endpoint));
+    }
+    
+    public static ApiResponse updateWarehouseProductInventory(WarehouseProductInventoryDto inventory) {
+        return handleResponse(getInstance().put('/warehouseProducts/inventorySummary', DTOs.serialize(inventory)));
+    }
+    
+    // Warehouse Operations
+    public static ApiResponse listWarehouses(Integer page, Integer pageSize, String sortBy, String sortDir) {
+        String endpoint = '/warehouses';
+        Map<String, String> queryParams = new Map<String, String>();
+        
+        if (page != null) {
+            queryParams.put('page', String.valueOf(page));
+        }
+        if (pageSize != null) {
+            queryParams.put('pageSize', String.valueOf(pageSize));
+        }
+        if (String.isNotBlank(sortBy)) {
+            queryParams.put('sortBy', sortBy);
+        }
+        if (String.isNotBlank(sortDir)) {
+            queryParams.put('sortDir', sortDir);
+        }
+        
+        String queryString = HttpUtils.buildQueryString(queryParams);
+        return handleResponse(getInstance().get(endpoint + queryString));
+    }
+    
+    public static ApiResponse getWarehouseById(String id) {
+        return handleResponse(getInstance().get('/warehouses/' + id));
+    }
+    
+    public static ApiResponse createWarehouse(WarehouseDto warehouse) {
+        return handleResponse(getInstance().post('/warehouses', DTOs.serialize(warehouse)));
+    }
+    
+    public static ApiResponse updateWarehouse(WarehouseDto warehouse) {
+        return handleResponse(getInstance().put('/warehouses', DTOs.serialize(warehouse)));
+    }
+    
+    public static ApiResponse deleteWarehouse(String id) {
+        return handleResponse(getInstance().del('/warehouses/' + id));
+    }
+    
+    // Warehouse Shipment Operations
+    public static ApiResponse listWarehouseShipments(Integer page, Integer pageSize, String sortBy, String sortDir) {
+        String endpoint = '/v2/inventory/shipments';
+        Map<String, String> queryParams = new Map<String, String>();
+        
+        if (page != null) {
+            queryParams.put('page', String.valueOf(page));
+        }
+        if (pageSize != null) {
+            queryParams.put('pageSize', String.valueOf(pageSize));
+        }
+        if (String.isNotBlank(sortBy)) {
+            queryParams.put('sortBy', sortBy);
+        }
+        if (String.isNotBlank(sortDir)) {
+            queryParams.put('sortDir', sortDir);
+        }
+        
+        String queryString = HttpUtils.buildQueryString(queryParams);
+        return handleResponse(getInstance().get(endpoint + queryString));
+    }
+    
+    public static ApiResponse getWarehouseShipment(String id) {
+        return handleResponse(getInstance().get('/v2/inventory/shipments/' + id));
+    }
+    
+    public static ApiResponse createWarehouseTransfer(WarehouseShipmentCreateReq shipment) {
+        return handleResponse(getInstance().post('/v2/inventory/shipments/warehouseTransfer', DTOs.serialize(shipment)));
+    }
+    
+    public static ApiResponse createASN(WarehouseShipmentCreateReq shipment) {
+        return handleResponse(getInstance().post('/v2/inventory/shipments/asn', DTOs.serialize(shipment)));
+    }
+    
+    public static ApiResponse confirmShipmentReceived(String id, WarehouseShipmentConfirmReceivedReq confirmation) {
+        return handleResponse(getInstance().put('/v2/inventory/shipments/' + id + '/confirmReceived', DTOs.serialize(confirmation)));
+    }
+    
+    public static ApiResponse markShipmentInTransit(String id, WarehouseShipmentMarkInTransitReq transitRequest) {
+        return handleResponse(getInstance().put('/v2/inventory/shipments/' + id + '/markInTransit', DTOs.serialize(transitRequest)));
+    }
+    
+    public static ApiResponse cancelShipment(String id, WarehouseShipmentCancelReq cancelRequest) {
+        return handleResponse(getInstance().put('/v2/inventory/shipments/' + id + '/cancel', DTOs.serialize(cancelRequest)));
+    }
 } 

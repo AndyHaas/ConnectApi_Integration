@@ -30,7 +30,7 @@ public with sharing class CreateOrderAction {
                     } else {
                         response = LacoreConnectService.createOrder(orderDto);
                     }
-                    responses.add(new CreateOrderResponse(response));
+                responses.add(new CreateOrderResponse(response));
                 }
             } catch (Exception e) {
                 throw new AuraHandledException(e.getMessage());
