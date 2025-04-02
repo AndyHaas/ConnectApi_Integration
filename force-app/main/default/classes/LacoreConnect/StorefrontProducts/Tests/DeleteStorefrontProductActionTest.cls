@@ -1,13 +1,18 @@
+/**
+ * @description Test class for DeleteStorefrontProductAction.
+ * This class provides test coverage for deleting storefront products,
+ * including successful deletion and error handling scenarios.
+ */
 @IsTest
-private class DeleteStorefrontProductActionTest {
+public class DeleteStorefrontProductActionTest {
     
     @TestSetup
-    static void setup() {
+    public static void setup() {
         // Add any test setup if needed
     }
     
     @IsTest
-    static void testDeleteStorefrontProduct() {
+    public static void testDeleteStorefrontProduct() {
         Test.startTest();
         
         // Create test request
@@ -31,7 +36,7 @@ private class DeleteStorefrontProductActionTest {
     }
     
     @IsTest
-    static void testErrorHandling() {
+    public static void testErrorHandling() {
         Test.startTest();
         
         // Create test request with missing required fields

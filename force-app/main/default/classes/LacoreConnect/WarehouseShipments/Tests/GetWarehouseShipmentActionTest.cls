@@ -1,20 +1,24 @@
+/**
+ * @description Test class for GetWarehouseShipmentAction.
+ * This class provides test coverage for retrieving warehouse shipments,
+ * including successful retrieval and error handling scenarios.
+ */
 @IsTest
-private class GetWarehouseShipmentActionTest {
+public class GetWarehouseShipmentActionTest {
     @IsTest
-    static void testGetWarehouseShipmentSuccess() {
+    public static void testGetWarehouseShipmentSuccess() {
         // Create test data
         WarehouseShipmentDto mockResponse = new WarehouseShipmentDto();
         mockResponse.id = '1';
         mockResponse.name = 'Test Shipment';
         mockResponse.status = 'Pending';
         
-        // Create a mock for LacoreConnectService
-        Test.startTest();
-        LacoreConnectService.setMock(new LacoreConnectServiceMock(mockResponse));
+        // Set up mock to return success response
+        Test.setMock(HttpCalloutMock.class, new LacoreConnectServiceMock(200, 'Success', JSON.serialize(mockResponse)));
         
         // Create request
         GetWarehouseShipmentAction.GetWarehouseShipmentRequest request = new GetWarehouseShipmentAction.GetWarehouseShipmentRequest();
-        request.id = 1;
+        request.id = '1';
         
         // Execute the action
         List<GetWarehouseShipmentAction.GetWarehouseShipmentResponse> responses = 
@@ -30,14 +34,13 @@ private class GetWarehouseShipmentActionTest {
     }
     
     @IsTest
-    static void testGetWarehouseShipmentError() {
-        // Create a mock for LacoreConnectService that throws an exception
-        Test.startTest();
-        LacoreConnectService.setMock(new LacoreConnectServiceMock(new CalloutException('Test error')));
+    public static void testGetWarehouseShipmentError() {
+        // Set up mock to return error response
+        Test.setMock(HttpCalloutMock.class, new LacoreConnectServiceMock(400, 'Bad Request', '{"error":"invalid_request","message":"Invalid shipment data","details":["Invalid parameters"]}'));
         
         // Create request
         GetWarehouseShipmentAction.GetWarehouseShipmentRequest request = new GetWarehouseShipmentAction.GetWarehouseShipmentRequest();
-        request.id = 1;
+        request.id = '1';
         
         // Execute the action
         List<GetWarehouseShipmentAction.GetWarehouseShipmentResponse> responses = 

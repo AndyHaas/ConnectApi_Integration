@@ -1,6 +1,18 @@
 public class StatisticsDataPointDto {
-    public DateTime timestamp;
-    public Map<String, Decimal> metrics;
-    public Map<String, Integer> counts;
-    public Map<String, Decimal> percentages;
+    public string id;
+    public string sku;
+    public string name;
+    public boolean isMapped;
+    public boolean isIgnored;
+    public string storefrontId;
+    public string brandId;
+    public integer price;
+    public integer quantity;
+    public integer quantityOnHand;
+    public integer quantityOnDemand;
+    public integer quantityInTransit;
+    public integer quantityAvailable;
+    public integer soldPerWeekAvg;
+    public integer inventoryStatus;
+    
 } 

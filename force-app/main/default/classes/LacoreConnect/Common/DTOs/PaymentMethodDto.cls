@@ -1,3 +1,7 @@
+/**
+ * @description DTO for payment method information
+ */
+@TestVisible
 public class PaymentMethodDto {
     @AuraEnabled public String id { get; set; }
     @AuraEnabled public String type { get; set; }

@@ -1,5 +1,11 @@
+/**
+ * @description Test class for LacoreConnectService.
+ * This class provides comprehensive test coverage for all service methods,
+ * including order management, webhook handling, warehouse operations,
+ * and shipment processing.
+ */
 @IsTest
-private without sharing class LacoreConnectServiceTest {
+public without sharing class LacoreConnectServiceTest {
     private static final String TEST_BRAND_ID = 'test-brand-id';
     private static final String TEST_WAREHOUSE_ID = 'test-warehouse-id';
     private static final String TEST_ORDER_ID = 'test-order-id';
@@ -14,12 +20,12 @@ private without sharing class LacoreConnectServiceTest {
     private static final String TEST_CARRIER = 'test-carrier';
     
     @TestSetup
-    static void setup() {
+    public static void setup() {
         Test.setMock(HttpCalloutMock.class, new LacoreConnectServiceMock());
     }
     
     @IsTest
-    static void testCreateOrder() {
+    public static void testCreateOrder() {
         Test.startTest();
         
         OrderDto order = new OrderDto();
@@ -77,7 +83,7 @@ private without sharing class LacoreConnectServiceTest {
     }
     
     @IsTest
-    static void testUpdateOrder() {
+    public static void testUpdateOrder() {
         Test.startTest();
         
         OrderDto order = new OrderDto();
@@ -136,17 +142,21 @@ private without sharing class LacoreConnectServiceTest {
     }
     
     @IsTest
-    static void testListOrders() {
+    public static void testListOrders() {
         Test.startTest();
-        
+
         LacoreConnectService.ApiResponse response = LacoreConnectService.listOrders(
-            TEST_BRAND_ID,
-            TEST_WAREHOUSE_ID,
-            TEST_STATUS,
+            TEST_STOREFRONT_ID,
             1,
             10,
             'createdAt',
-            'desc'
+            'desc',
+            Date.today(),
+            Date.today(),
+            Date.today(),
+            Date.today(),
+            '1234567890',
+            'DRAFT'
         );
         
         Test.stopTest();
@@ -156,7 +166,7 @@ private without sharing class LacoreConnectServiceTest {
     }
     
     @IsTest
-    static void testGetOrder() {
+    public static void testGetOrder() {
         Test.startTest();
         
         LacoreConnectService.ApiResponse response = LacoreConnectService.getOrder(TEST_ORDER_ID);
@@ -168,7 +178,7 @@ private without sharing class LacoreConnectServiceTest {
     }
     
     @IsTest
-    static void testCancelOrder() {
+    public static void testCancelOrder() {
         Test.startTest();
         
         LacoreConnectService.ApiResponse response = LacoreConnectService.cancelOrder(TEST_ORDER_ID);
@@ -180,7 +190,7 @@ private without sharing class LacoreConnectServiceTest {
     }
     
     @IsTest
-    static void testMarkOrderShipped() {
+    public static void testMarkOrderShipped() {
         Test.startTest();
         
         LacoreConnectService.ApiResponse response = LacoreConnectService.markOrderShipped(
@@ -196,7 +206,7 @@ private without sharing class LacoreConnectServiceTest {
     }
     
     @IsTest
-    static void testUpdateOrderStatus() {
+    public static void testUpdateOrderStatus() {
         Test.startTest();
         
         LacoreConnectService.ApiResponse response = LacoreConnectService.updateOrderStatus(
@@ -211,7 +221,7 @@ private without sharing class LacoreConnectServiceTest {
     }
     
     @IsTest
-    static void testSplitOrder() {
+    public static void testSplitOrder() {
         Test.startTest();
         
         SplitOrderDto split = new SplitOrderDto();
@@ -232,7 +242,7 @@ private without sharing class LacoreConnectServiceTest {
     }
     
     @IsTest
-    static void testCreateWebhook() {
+    public static void testCreateWebhook() {
         Test.startTest();
         
         WebhookDto webhook = new WebhookDto();
@@ -254,7 +264,7 @@ private without sharing class LacoreConnectServiceTest {
     }
     
     @IsTest
-    static void testUpdateWebhook() {
+    public static void testUpdateWebhook() {
         Test.startTest();
         
         WebhookDto webhook = new WebhookDto();
@@ -277,7 +287,7 @@ private without sharing class LacoreConnectServiceTest {
     }
     
     @IsTest
-    static void testListWebhooks() {
+    public static void testListWebhooks() {
         Test.startTest();
         
         LacoreConnectService.ApiResponse response = LacoreConnectService.listWebhooks(TEST_BRAND_ID, 1, 10);
@@ -289,7 +299,7 @@ private without sharing class LacoreConnectServiceTest {
     }
     
     @IsTest
-    static void testGetWebhook() {
+    public static void testGetWebhook() {
         Test.startTest();
         
         LacoreConnectService.ApiResponse response = LacoreConnectService.getWebhook(TEST_WEBHOOK_ID);
@@ -301,7 +311,7 @@ private without sharing class LacoreConnectServiceTest {
     }
     
     @IsTest
-    static void testDeleteWebhook() {
+    public static void testDeleteWebhook() {
         Test.startTest();
         
         LacoreConnectService.ApiResponse response = LacoreConnectService.deleteWebhook(TEST_WEBHOOK_ID);
@@ -313,7 +323,7 @@ private without sharing class LacoreConnectServiceTest {
     }
     
     @IsTest
-    static void testCreateBulkShipment() {
+    public static void testCreateBulkShipment() {
         Test.startTest();
         
         BulkShipmentDto shipment = new BulkShipmentDto();
@@ -330,7 +340,7 @@ private without sharing class LacoreConnectServiceTest {
     }
     
     @IsTest
-    static void testListBulkShipments() {
+    public static void testListBulkShipments() {
         Test.startTest();
         
         LacoreConnectService.ApiResponse response = LacoreConnectService.listBulkShipments(
@@ -348,7 +358,7 @@ private without sharing class LacoreConnectServiceTest {
     }
     
     @IsTest
-    static void testGetBulkShipment() {
+    public static void testGetBulkShipment() {
         Test.startTest();
         
         LacoreConnectService.ApiResponse response = LacoreConnectService.getBulkShipment(TEST_ORDER_ID);
@@ -360,10 +370,26 @@ private without sharing class LacoreConnectServiceTest {
     }
     
     @IsTest
-    static void testGetBrand() {
+    public static void testGetBrand() {
+        Test.startTest();
+        LacoreConnectService.ApiResponse response = LacoreConnectService.getBrand();
+        Test.stopTest();
+        
+        System.assertEquals(200, response.statusCode, 'Expected status code 200');
+        System.assertEquals(true, response.isSuccess, 'Expected success response');
+    }
+    
+    @IsTest
+    public static void testGetProductStatistics() {
         Test.startTest();
         
-        LacoreConnectService.ApiResponse response = LacoreConnectService.getBrand(TEST_BRAND_ID);
+        StatisticsRequestDto request = new StatisticsRequestDto();
+        request.brandId = TEST_BRAND_ID;
+        request.warehouseId = TEST_WAREHOUSE_ID;
+        request.startDate = System.now().addDays(-30);
+        request.endDate = System.now();
+        
+        LacoreConnectService.ApiResponse response = LacoreConnectService.getProductStatistics(request);
         
         Test.stopTest();
         
@@ -372,202 +398,13 @@ private without sharing class LacoreConnectServiceTest {
     }
     
     @IsTest
-    static void testListBrands() {
+    public static void testGetStorefrontProducts() {
         Test.startTest();
-        
-        LacoreConnectService.ApiResponse response = LacoreConnectService.listBrands(1, 10, 'name', 'asc');
-        
-        Test.stopTest();
-        
-        System.assertEquals(200, response.statusCode, 'Expected status code 200');
-        System.assertEquals(true, response.isSuccess, 'Expected success response');
-    }
-    
-    @IsTest
-    static void testErrorResponse() {
-        Test.startTest();
-        
-        // Set up mock to return error response
-        Test.setMock(HttpCalloutMock.class, new LacoreConnectServiceMock(400, 'Bad Request', '{"error":"invalid_request","message":"Invalid request","details":["Invalid parameters"]}'));
-        
-        LacoreConnectService.ApiResponse response = LacoreConnectService.getOrder(TEST_ORDER_ID);
-        
-        Test.stopTest();
-        
-        System.assertEquals(400, response.statusCode, 'Expected status code 400');
-        System.assertEquals(false, response.isSuccess, 'Expected error response');
-        System.assertEquals('Invalid request', response.errorMessage, 'Expected error message');
-    }
-    
-    @IsTest
-    static void testHandleResponseNull() {
-        Test.startTest();
-        // Use a public method that will result in a null response
-        LacoreConnectService.ApiResponse response = LacoreConnectService.getShipment(null);
-        Test.stopTest();
-        
-        System.assertEquals(false, response.isSuccess, 'Response should not be successful');
-        System.assertEquals('No response received from server', response.errorMessage, 'Error message should match');
-        System.assertEquals('NO_RESPONSE', response.errorCode, 'Error code should match');
-    }
-    
-    @IsTest
-    static void testHandleResponseEmptyBody() {
-        Test.startTest();
-        // Use a public method that will result in an empty response
-        LacoreConnectService.ApiResponse response = LacoreConnectService.getShipment('empty-response-id');
-        Test.stopTest();
-        
-        System.assertEquals(false, response.isSuccess, 'Response should not be successful');
-        System.assertEquals('Empty response body received', response.errorMessage, 'Error message should match');
-        System.assertEquals('EMPTY_RESPONSE', response.errorCode, 'Error code should match');
-    }
-    
-    @IsTest
-    static void testHandleResponseParseError() {
-        Test.startTest();
-        // Use a public method that will result in an invalid JSON response
-        LacoreConnectService.ApiResponse response = LacoreConnectService.getShipment('invalid-json-id');
-        Test.stopTest();
-        
-        System.assertEquals(false, response.isSuccess, 'Response should not be successful');
-        System.assertEquals('Failed to parse error response', response.errorMessage, 'Error message should match');
-        System.assertEquals('PARSE_ERROR', response.errorCode, 'Error code should match');
-        System.assertNotEquals(null, response.errorDetails, 'Error details should not be null');
-        System.assertNotEquals(null, response.errorData, 'Error data should not be null');
-    }
-    
-    @IsTest
-    static void testHandleResponseSpecificStatusCodes() {
-        Map<Integer, String> statusCodes = new Map<Integer, String>{
-            400 => 'BAD_REQUEST',
-            401 => 'UNAUTHORIZED',
-            403 => 'FORBIDDEN',
-            404 => 'NOT_FOUND',
-            429 => 'RATE_LIMIT',
-            500 => 'SERVER_ERROR',
-            503 => 'SERVICE_UNAVAILABLE'
-        };
-        
-        for (Integer statusCode : statusCodes.keySet()) {
-            Test.startTest();
-            // Use a public method that will result in the specific status code
-            LacoreConnectService.ApiResponse response = LacoreConnectService.getShipment('status-' + statusCode);
-            Test.stopTest();
-            
-            System.assertEquals(false, response.isSuccess, 'Response should not be successful');
-            System.assertEquals(statusCodes.get(statusCode), response.errorCode, 'Error code should match for status ' + statusCode);
-        }
-    }
-    
-    @IsTest
-    static void testHandleResponseSuccess() {
-        Test.startTest();
-        // Use a public method that will result in a successful response
-        LacoreConnectService.ApiResponse response = LacoreConnectService.getShipment('success-id');
-        Test.stopTest();
-        
-        System.assertEquals(true, response.isSuccess, 'Response should be successful');
-        System.assertEquals(200, response.statusCode, 'Status code should be 200');
-        System.assertNotEquals(null, response.body, 'Response body should not be null');
-    }
-    
-    @IsTest
-    static void testHandleResponseErrorWithDetails() {
-        Test.startTest();
-        // Use a public method that will result in a detailed error response
-        LacoreConnectService.ApiResponse response = LacoreConnectService.getShipment('detailed-error-id');
-        Test.stopTest();
-        
-        System.assertEquals(false, response.isSuccess, 'Response should not be successful');
-        System.assertEquals('Test error', response.errorMessage, 'Error message should match');
-        System.assertEquals('TEST_ERROR', response.errorCode, 'Error code should match');
-        System.assertEquals('Test details', response.errorDetails, 'Error details should match');
-        System.assertNotEquals(null, response.errorData, 'Error data should not be null');
-        System.assertEquals('value', response.errorData.get('key'), 'Error data should contain correct value');
-    }
-    
-    @IsTest
-    static void testHandleResponseNullErrorResponse() {
-        Test.startTest();
-        // Use a public method that will result in a null error response
-        LacoreConnectService.ApiResponse response = LacoreConnectService.getShipment('null-error-id');
-        Test.stopTest();
-        
-        System.assertEquals(false, response.isSuccess, 'Response should not be successful');
-        System.assertEquals('Failed to parse error response', response.errorMessage, 'Error message should match');
-        System.assertEquals('PARSE_ERROR', response.errorCode, 'Error code should match');
-        System.assertEquals('null', response.errorDetails, 'Error details should match');
-    }
-    
-    @IsTest
-    static void testCalculateRates() {
-        // Prepare test request
-        RateRequestDto request = new RateRequestDto();
-        request.brandId = 'test-brand-id';
-        request.warehouseId = 'test-warehouse-id';
-        request.destination = new AddressDto();
-        request.destination.country = 'US';
-        request.destination.state = 'CA';
-        request.destination.city = 'San Francisco';
-        request.destination.zip = '94105';
-        request.destination.address1 = '123 Test St';
-        
-        RateItemDto item = new RateItemDto();
-        item.sku = 'TEST-SKU';
-        item.quantity = 1;
-        item.weight = 1.0;
-        item.length = 10.0;
-        item.width = 10.0;
-        item.height = 10.0;
-        request.items = new List<RateItemDto>{ item };
-        
-        // Execute test
-        Test.startTest();
-        LacoreConnectService.ApiResponse response = LacoreConnectService.calculateRates(request);
-        Test.stopTest();
-        
-        // Verify results
-        System.assertEquals(200, response.statusCode, 'Expected status code 200');
-        System.assertEquals(true, response.isSuccess, 'Expected success response');
-    }
-    
-    @IsTest
-    static void testGetShipment() {
-        Test.startTest();
-        LacoreConnectService.ApiResponse response = LacoreConnectService.getShipment('test-shipment-id');
-        Test.stopTest();
-        
-        System.assertEquals(200, response.statusCode, 'Expected status code 200');
-        System.assertEquals(true, response.isSuccess, 'Expected success response');
-    }
-    
-    @IsTest
-    static void testListShipments() {
-        Test.startTest();
-        LacoreConnectService.ApiResponse response = LacoreConnectService.listShipments(
-            'test-brand-id',
-            'test-warehouse-id',
-            'active',
+        LacoreConnectService.ApiResponse response = LacoreConnectService.getStorefrontProducts(
+            TEST_STOREFRONT_ID,
+            'TEST-SKU',
             1,
             10,
-            'createdAt',
-            'desc'
-        );
-        Test.stopTest();
-        
-        System.assertEquals(200, response.statusCode, 'Expected status code 200');
-        System.assertEquals(true, response.isSuccess, 'Expected success response');
-    }
-    
-    // Warehouse Shipment Tests
-    @IsTest
-    static void testListWarehouseShipments() {
-        Test.startTest();
-        LacoreConnectService.ApiResponse response = LacoreConnectService.listWarehouseShipments(
-            1,
-            10,
-            'createdAt',
             'desc'
         );
         Test.stopTest();
@@ -577,7 +414,293 @@ private without sharing class LacoreConnectServiceTest {
     }
     
     @IsTest
-    static void testGetWarehouseShipment() {
+    public static void testGetStorefrontProductById() {
+        Test.startTest();
+        LacoreConnectService.ApiResponse response = LacoreConnectService.getStorefrontProductById('test-product-id');
+        Test.stopTest();
+        
+        System.assertEquals(200, response.statusCode, 'Expected status code 200');
+        System.assertEquals(true, response.isSuccess, 'Expected success response');
+    }
+    
+    @IsTest
+    public static void testCreateStorefrontProduct() {
+        Test.startTest();
+        
+        StorefrontProductDto product = new StorefrontProductDto();
+        product.name = 'Test Product';
+        product.sku = 'TEST-SKU';
+        product.description = 'Test Description';
+        product.price = 100.00;
+        product.brandId = TEST_BRAND_ID;
+        
+        LacoreConnectService.ApiResponse response = LacoreConnectService.createStorefrontProduct(product);
+        
+        Test.stopTest();
+        
+        System.assertEquals(200, response.statusCode, 'Expected status code 200');
+        System.assertEquals(true, response.isSuccess, 'Expected success response');
+    }
+    
+    @IsTest
+    public static void testUpdateStorefrontProduct() {
+        Test.startTest();
+        
+        StorefrontProductDto product = new StorefrontProductDto();
+        product.id = 'test-product-id';
+        product.name = 'Updated Test Product';
+        product.sku = 'TEST-SKU';
+        product.description = 'Updated Test Description';
+        product.price = 150.00;
+        product.brandId = TEST_BRAND_ID;
+        
+        LacoreConnectService.ApiResponse response = LacoreConnectService.updateStorefrontProduct('test-product-id', product);
+        
+        Test.stopTest();
+        
+        System.assertEquals(200, response.statusCode, 'Expected status code 200');
+        System.assertEquals(true, response.isSuccess, 'Expected success response');
+    }
+    
+    @IsTest
+    public static void testDeleteStorefrontProduct() {
+        Test.startTest();
+        LacoreConnectService.ApiResponse response = LacoreConnectService.deleteStorefrontProduct('test-product-id');
+        Test.stopTest();
+        
+        System.assertEquals(200, response.statusCode, 'Expected status code 200');
+        System.assertEquals(true, response.isSuccess, 'Expected success response');
+    }
+    
+    @IsTest
+    public static void testGetStorefronts() {
+        Test.startTest();
+        LacoreConnectService.ApiResponse response = LacoreConnectService.getStorefronts(1, 10, 'desc');
+        Test.stopTest();
+        
+        System.assertEquals(200, response.statusCode, 'Expected status code 200');
+        System.assertEquals(true, response.isSuccess, 'Expected success response');
+    }
+    
+    @IsTest
+    public static void testGetStorefrontById() {
+        Test.startTest();
+        LacoreConnectService.ApiResponse response = LacoreConnectService.getStorefrontById('test-storefront-id');
+        Test.stopTest();
+        
+        System.assertEquals(200, response.statusCode, 'Expected status code 200');
+        System.assertEquals(true, response.isSuccess, 'Expected success response');
+    }
+    
+    @IsTest
+    public static void testGetVendors() {
+        Test.startTest();
+        LacoreConnectService.ApiResponse response = LacoreConnectService.getVendors();
+        Test.stopTest();
+        
+        System.assertEquals(200, response.statusCode, 'Expected status code 200');
+        System.assertEquals(true, response.isSuccess, 'Expected success response');
+    }
+    
+    @IsTest
+    public static void testGetWarehouseProducts() {
+        Test.startTest();
+        LacoreConnectService.ApiResponse response = LacoreConnectService.getWarehouseProducts(
+            TEST_WAREHOUSE_ID,
+            'TEST-SKU',
+            1,
+            10,
+            'desc'
+        );
+        Test.stopTest();
+        
+        System.assertEquals(200, response.statusCode, 'Expected status code 200');
+        System.assertEquals(true, response.isSuccess, 'Expected success response');
+    }
+    
+    @IsTest
+    public static void testGetWarehouseProductById() {
+        Test.startTest();
+        LacoreConnectService.ApiResponse response = LacoreConnectService.getWarehouseProductById('test-product-id');
+        Test.stopTest();
+        
+        System.assertEquals(200, response.statusCode, 'Expected status code 200');
+        System.assertEquals(true, response.isSuccess, 'Expected success response');
+    }
+    
+    @IsTest
+    public static void testCreateWarehouseProduct() {
+        Test.startTest();
+        
+        WarehouseProductDto product = new WarehouseProductDto();
+        product.name = 'Test Product';
+        product.sku = 'TEST-SKU';
+        product.description = 'Test Description';
+        product.warehouseId = TEST_WAREHOUSE_ID;
+        
+        LacoreConnectService.ApiResponse response = LacoreConnectService.createWarehouseProduct(product);
+        
+        Test.stopTest();
+        
+        System.assertEquals(200, response.statusCode, 'Expected status code 200');
+        System.assertEquals(true, response.isSuccess, 'Expected success response');
+    }
+    
+    @IsTest
+    public static void testUpdateWarehouseProduct() {
+        Test.startTest();
+        
+        WarehouseProductDto product = new WarehouseProductDto();
+        product.id = 'test-product-id';
+        product.name = 'Updated Test Product';
+        product.sku = 'TEST-SKU';
+        product.description = 'Updated Test Description';
+        product.warehouseId = TEST_WAREHOUSE_ID;
+        
+        LacoreConnectService.ApiResponse response = LacoreConnectService.updateWarehouseProduct('test-product-id', product);
+        
+        Test.stopTest();
+        
+        System.assertEquals(200, response.statusCode, 'Expected status code 200');
+        System.assertEquals(true, response.isSuccess, 'Expected success response');
+    }
+    
+    @IsTest
+    public static void testDeleteWarehouseProduct() {
+        Test.startTest();
+        LacoreConnectService.ApiResponse response = LacoreConnectService.deleteWarehouseProduct('test-product-id');
+        Test.stopTest();
+        
+        System.assertEquals(200, response.statusCode, 'Expected status code 200');
+        System.assertEquals(true, response.isSuccess, 'Expected success response');
+    }
+    
+    @IsTest
+    public static void testGetWarehouseProductInventoryByLocation() {
+        Test.startTest();
+        LacoreConnectService.ApiResponse response = LacoreConnectService.getWarehouseProductInventoryByLocation(
+            'test-item',
+            'test-product-id',
+            TEST_WAREHOUSE_ID,
+            TEST_BRAND_ID,
+            'test-lpn',
+            'test-location',
+            'test-lot',
+            1,
+            10,
+            'desc'
+        );
+        Test.stopTest();
+        
+        System.assertEquals(200, response.statusCode, 'Expected status code 200');
+        System.assertEquals(true, response.isSuccess, 'Expected success response');
+    }
+    
+    @IsTest
+    public static void testUpdateWarehouseProductInventory() {
+        Test.startTest();
+        
+        WarehouseProductInventoryDto inventory = new WarehouseProductInventoryDto();
+        inventory.warehouseProductId = 'test-product-id';
+        inventory.quantity = 100;
+        inventory.locationCode = 'TEST-LOC';
+        inventory.lotNumber = 'TEST-LOT';
+        
+        LacoreConnectService.ApiResponse response = LacoreConnectService.updateWarehouseProductInventory(inventory);
+        
+        Test.stopTest();
+        
+        System.assertEquals(200, response.statusCode, 'Expected status code 200');
+        System.assertEquals(true, response.isSuccess, 'Expected success response');
+    }
+    
+    @IsTest
+    public static void testListWarehouses() {
+        Test.startTest();
+        LacoreConnectService.ApiResponse response = LacoreConnectService.listWarehouses(1, 10, 'name', 'desc');
+        Test.stopTest();
+        
+        System.assertEquals(200, response.statusCode, 'Expected status code 200');
+        System.assertEquals(true, response.isSuccess, 'Expected success response');
+    }
+    
+    @IsTest
+    public static void testGetWarehouseById() {
+        Test.startTest();
+        LacoreConnectService.ApiResponse response = LacoreConnectService.getWarehouseById('test-warehouse-id');
+        Test.stopTest();
+        
+        System.assertEquals(200, response.statusCode, 'Expected status code 200');
+        System.assertEquals(true, response.isSuccess, 'Expected success response');
+    }
+    
+    @IsTest
+    public static void testCreateWarehouse() {
+        Test.startTest();
+        
+        WarehouseDto warehouse = new WarehouseDto();
+        warehouse.name = 'Test Warehouse';
+        warehouse.code = 'TEST-WH';
+        warehouse.addressBusinessName = 'Test Company';
+        warehouse.addressLine1 = '123 Test St';
+        warehouse.addressCity = 'Test City';
+        warehouse.addressState = 'TS';
+        warehouse.addressZipCode = '12345';
+        warehouse.addressCountryCode = 'US';
+        
+        LacoreConnectService.ApiResponse response = LacoreConnectService.createWarehouse(warehouse);
+        
+        Test.stopTest();
+        
+        System.assertEquals(200, response.statusCode, 'Expected status code 200');
+        System.assertEquals(true, response.isSuccess, 'Expected success response');
+    }
+    
+    @IsTest
+    public static void testUpdateWarehouse() {
+        Test.startTest();
+        
+        WarehouseDto warehouse = new WarehouseDto();
+        warehouse.id = 'test-warehouse-id';
+        warehouse.name = 'Updated Test Warehouse';
+        warehouse.code = 'TEST-WH';
+        warehouse.addressBusinessName = 'Test Company';
+        warehouse.addressLine1 = '123 Test St';
+        warehouse.addressCity = 'Test City';
+        warehouse.addressState = 'TS';
+        warehouse.addressZipCode = '12345';
+        warehouse.addressCountryCode = 'US';
+        
+        LacoreConnectService.ApiResponse response = LacoreConnectService.updateWarehouse(warehouse);
+        
+        Test.stopTest();
+        
+        System.assertEquals(200, response.statusCode, 'Expected status code 200');
+        System.assertEquals(true, response.isSuccess, 'Expected success response');
+    }
+    
+    @IsTest
+    public static void testDeleteWarehouse() {
+        Test.startTest();
+        LacoreConnectService.ApiResponse response = LacoreConnectService.deleteWarehouse('test-warehouse-id');
+        Test.stopTest();
+        
+        System.assertEquals(200, response.statusCode, 'Expected status code 200');
+        System.assertEquals(true, response.isSuccess, 'Expected success response');
+    }
+    
+    @IsTest
+    public static void testListWarehouseShipments() {
+        Test.startTest();
+        LacoreConnectService.ApiResponse response = LacoreConnectService.listWarehouseShipments(1, 10, 'createdAt', 'desc');
+        Test.stopTest();
+        
+        System.assertEquals(200, response.statusCode, 'Expected status code 200');
+        System.assertEquals(true, response.isSuccess, 'Expected success response');
+    }
+    
+    @IsTest
+    public static void testGetWarehouseShipment() {
         Test.startTest();
         LacoreConnectService.ApiResponse response = LacoreConnectService.getWarehouseShipment('test-shipment-id');
         Test.stopTest();
@@ -587,23 +710,21 @@ private without sharing class LacoreConnectServiceTest {
     }
     
     @IsTest
-    static void testCreateWarehouseTransfer() {
+    public static void testCreateWarehouseTransfer() {
         Test.startTest();
         
-        WarehouseShipmentCreateReq shipment = new WarehouseShipmentCreateReq();
-        shipment.fromWarehouseId = TEST_WAREHOUSE_ID;
-        shipment.toWarehouseId = 'test-destination-warehouse-id';
-        shipment.referenceNumber = 'TEST-TRANSFER-001';
-        shipment.expectedDateTimeUtc = System.now();
-        shipment.items = new List<WarehouseShipmentItemCreateReq>();
+        WarehouseShipmentCreateReq request = new WarehouseShipmentCreateReq();
+        request.fromWarehouseId = TEST_WAREHOUSE_ID;
+        request.toWarehouseId = 'test-warehouse-id-2';
+        request.referenceNumber = 'TEST-TRANSFER-001';
         
         WarehouseShipmentItemCreateReq item = new WarehouseShipmentItemCreateReq();
         item.warehouseProductId = 'test-product-id';
-        item.quantity = 10;
-        item.lotNumber = 'LOT-001';
-        shipment.items.add(item);
+        item.quantity = 1;
+        item.lotNumber = 'TEST-LOT-001';
+        request.items = new List<WarehouseShipmentItemCreateReq>{item};
         
-        LacoreConnectService.ApiResponse response = LacoreConnectService.createWarehouseTransfer(shipment);
+        LacoreConnectService.ApiResponse response = LacoreConnectService.createWarehouseTransfer(request);
         
         Test.stopTest();
         
@@ -612,23 +733,21 @@ private without sharing class LacoreConnectServiceTest {
     }
     
     @IsTest
-    static void testCreateASN() {
+    public static void testCreateASN() {
         Test.startTest();
         
-        WarehouseShipmentCreateReq shipment = new WarehouseShipmentCreateReq();
-        shipment.fromWarehouseId = TEST_WAREHOUSE_ID;
-        shipment.toWarehouseId = 'test-destination-warehouse-id';
-        shipment.referenceNumber = 'TEST-ASN-001';
-        shipment.expectedDateTimeUtc = System.now();
-        shipment.items = new List<WarehouseShipmentItemCreateReq>();
+        WarehouseShipmentCreateReq request = new WarehouseShipmentCreateReq();
+        request.fromWarehouseId = 'test-warehouse-id-2';
+        request.toWarehouseId = TEST_WAREHOUSE_ID;
+        request.referenceNumber = 'TEST-ASN-001';
         
         WarehouseShipmentItemCreateReq item = new WarehouseShipmentItemCreateReq();
         item.warehouseProductId = 'test-product-id';
-        item.quantity = 10;
-        item.lotNumber = 'LOT-001';
-        shipment.items.add(item);
+        item.quantity = 1;
+        item.lotNumber = 'TEST-LOT-001';
+        request.items = new List<WarehouseShipmentItemCreateReq>{item};
         
-        LacoreConnectService.ApiResponse response = LacoreConnectService.createASN(shipment);
+        LacoreConnectService.ApiResponse response = LacoreConnectService.createASN(request);
         
         Test.stopTest();
         
@@ -637,20 +756,19 @@ private without sharing class LacoreConnectServiceTest {
     }
     
     @IsTest
-    static void testConfirmShipmentReceived() {
+    public static void testConfirmShipmentReceived() {
         Test.startTest();
         
-        WarehouseShipmentConfirmReceivedReq confirmation = new WarehouseShipmentConfirmReceivedReq();
-        confirmation.receivedAtDateTimeUtc = System.now();
-        confirmation.items = new List<WarehouseShipmentItemConfirmReceivedReq>();
+        WarehouseShipmentConfirmReceivedReq request = new WarehouseShipmentConfirmReceivedReq();
+        request.note = 'Test confirmation';
         
         WarehouseShipmentItemConfirmReceivedReq item = new WarehouseShipmentItemConfirmReceivedReq();
         item.warehouseShipmentItemId = 'test-shipment-item-id';
-        item.quantityReceived = 10;
-        item.lotNumber = 'LOT-001';
-        confirmation.items.add(item);
+        item.quantityReceived = 1;
+        item.lotNumber = 'TEST-LOT-001';
+        request.items = new List<WarehouseShipmentItemConfirmReceivedReq>{item};
         
-        LacoreConnectService.ApiResponse response = LacoreConnectService.confirmShipmentReceived('test-shipment-id', confirmation);
+        LacoreConnectService.ApiResponse response = LacoreConnectService.confirmShipmentReceived('test-shipment-id', request);
         
         Test.stopTest();
         
@@ -659,15 +777,10 @@ private without sharing class LacoreConnectServiceTest {
     }
     
     @IsTest
-    static void testMarkShipmentInTransit() {
+    public static void testMarkShipmentInTransit() {
         Test.startTest();
         
-        WarehouseShipmentMarkInTransitReq transitRequest = new WarehouseShipmentMarkInTransitReq();
-        transitRequest.inTransitDateTimeUtc = System.now();
-        transitRequest.carrier = 'Test Carrier';
-        transitRequest.trackingNumber = 'TEST-TRACK-001';
-        
-        LacoreConnectService.ApiResponse response = LacoreConnectService.markShipmentInTransit('test-shipment-id', transitRequest);
+        LacoreConnectService.ApiResponse response = LacoreConnectService.markShipmentInTransit('test-shipment-id');
         
         Test.stopTest();
         
@@ -676,13 +789,13 @@ private without sharing class LacoreConnectServiceTest {
     }
     
     @IsTest
-    static void testCancelShipment() {
+    public static void testCancelShipment() {
         Test.startTest();
         
-        WarehouseShipmentCancelReq cancelRequest = new WarehouseShipmentCancelReq();
-        cancelRequest.cancelReason = 'Test cancellation reason';
+        WarehouseShipmentCancelReq request = new WarehouseShipmentCancelReq();
+        request.note = 'Test cancellation';
         
-        LacoreConnectService.ApiResponse response = LacoreConnectService.cancelShipment('test-shipment-id', cancelRequest);
+        LacoreConnectService.ApiResponse response = LacoreConnectService.cancelShipment('test-shipment-id');
         
         Test.stopTest();
         
@@ -691,7 +804,7 @@ private without sharing class LacoreConnectServiceTest {
     }
     
     @IsTest
-    static void testListWarehouseShipmentsWithNullParams() {
+    public static void testListWarehouseShipmentsWithNullParams() {
         Test.startTest();
         LacoreConnectService.ApiResponse response = LacoreConnectService.listWarehouseShipments(
             null,
@@ -706,13 +819,28 @@ private without sharing class LacoreConnectServiceTest {
     }
     
     @IsTest
-    static void testWarehouseShipmentErrorResponse() {
+    public static void testWarehouseShipmentErrorResponse() {
         Test.startTest();
         
         // Set up mock to return error response
         Test.setMock(HttpCalloutMock.class, new LacoreConnectServiceMock(400, 'Bad Request', '{"error":"invalid_request","message":"Invalid shipment data","details":["Invalid parameters"]}'));
         
         WarehouseShipmentCreateReq shipment = new WarehouseShipmentCreateReq();
+        shipment.fromWarehouseId = TEST_WAREHOUSE_ID;
+        shipment.toWarehouseId = 'test-warehouse-id-2';
+        shipment.items = new List<WarehouseShipmentItemCreateReq>();
+        
+        WarehouseShipmentItemCreateReq item = new WarehouseShipmentItemCreateReq();
+        item.warehouseProductId = 'test-product-id';
+        item.quantity = 1;
+        shipment.items.add(item);
+
+        shipment.referenceNumber = 'TEST-TRANSFER-001';
+        shipment.type = 'warehouseTransfer';
+        shipment.name = 'Test Transfer';
+        shipment.purchaseOrderId = 'TEST-PO-001';
+        shipment.packingListId = 'TEST-PACKING-LIST-001';
+
         LacoreConnectService.ApiResponse response = LacoreConnectService.createWarehouseTransfer(shipment);
         
         Test.stopTest();

@@ -1,6 +1,6 @@
 public class WarehouseShipmentCreateReq {
     @AuraEnabled
-    public Integer vendorId { get; set; }
+    public String vendorId { get; set; }
     
     @AuraEnabled
     public Integer brandId { get; set; }
@@ -15,16 +15,16 @@ public class WarehouseShipmentCreateReq {
     public String type { get; set; }
     
     @AuraEnabled
-    public Integer fromWarehouseId { get; set; }
+    public String fromWarehouseId { get; set; }
     
     @AuraEnabled
-    public Integer toWarehouseId { get; set; }
+    public String toWarehouseId { get; set; }
     
     @AuraEnabled
     public String name { get; set; }
     
     @AuraEnabled
-    public Integer purchaseOrderId { get; set; }
+    public String purchaseOrderId { get; set; }
     
     @AuraEnabled
     public List<WarehouseShipmentItemCreateReq> items { get; set; }
@@ -33,5 +33,5 @@ public class WarehouseShipmentCreateReq {
     public String notes { get; set; }
     
     @AuraEnabled
-    public Integer packingListId { get; set; }
+    public String packingListId { get; set; }
 } 

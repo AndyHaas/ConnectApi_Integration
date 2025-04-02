@@ -1,12 +1,17 @@
+/**
+ * @description Test class for GetVendorAction.
+ * This class provides test coverage for retrieving vendor information,
+ * including successful retrieval and error handling scenarios.
+ */
 @IsTest
-private class GetVendorActionTest {
+public class GetVendorActionTest {
     @TestSetup
-    static void setup() {
+    public static void setup() {
         // Setup test data if needed
     }
     
     @IsTest
-    static void testGetVendor() {        
+    public static void testGetVendor() {        
         // Create test response
         VendorDto mockVendor = new VendorDto();
         mockVendor.id = 'test-id-1';
@@ -32,7 +37,7 @@ private class GetVendorActionTest {
     }
     
     @IsTest
-    static void testGetVendorError() {        
+    public static void testGetVendorError() {        
         // Create test error response
         String mockErrorResponse = '{"error": "Vendor not found"}';
         

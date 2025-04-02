@@ -1,3 +1,7 @@
+/**
+ * @description DTO for address information
+ */
+@TestVisible
 public class AddressDto {
     @AuraEnabled public String name { get; set; }
     @AuraEnabled public String company { get; set; }

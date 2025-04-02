@@ -1,12 +1,17 @@
+/**
+ * @description Test class for GetWarehouseProductsAction.
+ * This class provides test coverage for listing warehouse products,
+ * including successful retrieval and error handling scenarios.
+ */
 @IsTest
-private class GetWarehouseProductsActionTest {
+public class GetWarehouseProductsActionTest {
     @TestSetup
-    static void setup() {
+    public static void setup() {
         // Setup test data if needed
     }
     
     @IsTest
-    static void testGetWarehouseProducts() {
+    public static void testGetWarehouseProducts() {
         // Create test request
         GetWarehouseProductsAction.GetWarehouseProductsRequest request = new GetWarehouseProductsAction.GetWarehouseProductsRequest();
         request.warehouseId = 'test-warehouse-1';
@@ -46,7 +51,7 @@ private class GetWarehouseProductsActionTest {
     }
     
     @IsTest
-    static void testGetWarehouseProductsError() {
+    public static void testGetWarehouseProductsError() {
         // Create test request
         GetWarehouseProductsAction.GetWarehouseProductsRequest request = new GetWarehouseProductsAction.GetWarehouseProductsRequest();
         request.warehouseId = 'test-warehouse-1';

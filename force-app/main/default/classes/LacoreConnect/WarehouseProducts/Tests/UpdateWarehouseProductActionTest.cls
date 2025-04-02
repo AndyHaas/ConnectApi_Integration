@@ -1,12 +1,17 @@
+/**
+ * @description Test class for UpdateWarehouseProductAction.
+ * This class provides test coverage for updating warehouse products,
+ * including successful updates and error handling scenarios.
+ */
 @IsTest
-private class UpdateWarehouseProductActionTest {
+public class UpdateWarehouseProductActionTest {
     @TestSetup
-    static void setup() {
+    public static void setup() {
         // Setup test data if needed
     }
     
     @IsTest
-    static void testUpdateWarehouseProduct() {
+    public static void testUpdateWarehouseProduct() {
         // Create test request
         UpdateWarehouseProductAction.UpdateWarehouseProductRequest request = new UpdateWarehouseProductAction.UpdateWarehouseProductRequest();
         request.id = 'test-id-1';
@@ -49,7 +54,7 @@ private class UpdateWarehouseProductActionTest {
     }
     
     @IsTest
-    static void testUpdateWarehouseProductError() {
+    public static void testUpdateWarehouseProductError() {
         // Create test request
         UpdateWarehouseProductAction.UpdateWarehouseProductRequest request = new UpdateWarehouseProductAction.UpdateWarehouseProductRequest();
         request.id = 'test-id-1';

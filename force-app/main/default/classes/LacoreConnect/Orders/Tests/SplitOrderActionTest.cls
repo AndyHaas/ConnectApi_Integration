@@ -1,14 +1,19 @@
+/**
+ * @description Test class for SplitOrderAction.
+ * This class provides test coverage for the SplitOrderAction class,
+ * including successful and error scenarios.
+ */
 @IsTest
-private class SplitOrderActionTest {
+public class SplitOrderActionTest {
     private static final String TEST_ORDER_ID = 'test-order-id';
     
     @TestSetup
-    static void setup() {
+    public static void setup() {
         Test.setMock(HttpCalloutMock.class, new LacoreConnectServiceMock());
     }
     
     @IsTest
-    static void testSplitOrder() {
+    public static void testSplitOrder() {
         Test.startTest();
         
         SplitOrderAction.SplitOrderRequest request = new SplitOrderAction.SplitOrderRequest();
@@ -24,7 +29,7 @@ private class SplitOrderActionTest {
     }
     
     @IsTest
-    static void testSplitOrderError() {
+    public static void testSplitOrderError() {
         Test.startTest();
         
         // Set up mock to return error
@@ -44,7 +49,7 @@ private class SplitOrderActionTest {
     }
     
     @IsTest
-    static void testSplitOrderMultiple() {
+    public static void testSplitOrderMultiple() {
         Test.startTest();
         
         List<SplitOrderAction.SplitOrderRequest> requests = new List<SplitOrderAction.SplitOrderRequest>();

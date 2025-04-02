@@ -5,20 +5,13 @@ public class MarkShipmentInTransitAction {
         
         for (MarkShipmentInTransitRequest request : requests) {
             try {
-                WarehouseShipmentDto apiResponse = LacoreConnectService.markShipmentInTransit(
-                    request.id,
-                    request.transitRequest
+                LacoreConnectService.ApiResponse apiResponse = LacoreConnectService.markShipmentInTransit(
+                    request.id
                 );
-                
-                MarkShipmentInTransitResponse response = new MarkShipmentInTransitResponse();
-                response.isSuccess = true;
-                response.shipment = apiResponse;
-                responses.add(response);
+
+                responses.add(new MarkShipmentInTransitResponse(apiResponse));
             } catch (Exception e) {
-                MarkShipmentInTransitResponse response = new MarkShipmentInTransitResponse();
-                response.isSuccess = false;
-                response.errorMessage = e.getMessage();
-                responses.add(response);
+                throw new AuraHandledException(e.getMessage());
             }
         }
         
@@ -27,10 +20,7 @@ public class MarkShipmentInTransitAction {
     
     public class MarkShipmentInTransitRequest {
         @InvocableVariable(required=true label='ID' description='ID of the shipment to mark as in transit.')
-        public Integer id;
-        
-        @InvocableVariable(required=true label='Transit Request' description='Transit request details.')
-        public WarehouseShipmentMarkInTransitReq transitRequest;
+        public String id;
     }
     
     public class MarkShipmentInTransitResponse {
@@ -42,5 +32,11 @@ public class MarkShipmentInTransitAction {
         
         @InvocableVariable(required=false label='Shipment' description='The updated warehouse shipment.')
         public WarehouseShipmentDto shipment;
+
+        public MarkShipmentInTransitResponse(LacoreConnectService.ApiResponse response) {
+            this.isSuccess = response.isSuccess;
+            this.errorMessage = response.errorMessage;
+            this.shipment = (WarehouseShipmentDto) JSON.deserialize(response.body, WarehouseShipmentDto.class);
+        }
     }
 } 

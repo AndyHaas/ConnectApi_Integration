@@ -1,6 +1,6 @@
 public class WarehouseShipmentItemCreateReq {
     @AuraEnabled
-    public Integer warehouseProductId { get; set; }
+    public String warehouseProductId { get; set; }
     
     @AuraEnabled
     public Integer quantity { get; set; }
@@ -15,5 +15,5 @@ public class WarehouseShipmentItemCreateReq {
     public DateTime expiresDateTimeUtc { get; set; }
     
     @AuraEnabled
-    public Integer purchaseOrderItemId { get; set; }
+    public String purchaseOrderItemId { get; set; }
 } 

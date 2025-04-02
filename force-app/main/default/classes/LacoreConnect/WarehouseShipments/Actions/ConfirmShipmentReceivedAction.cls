@@ -5,20 +5,14 @@ public class ConfirmShipmentReceivedAction {
         
         for (ConfirmShipmentReceivedRequest request : requests) {
             try {
-                WarehouseShipmentDto apiResponse = LacoreConnectService.confirmShipmentReceived(
+                LacoreConnectService.ApiResponse apiResponse = LacoreConnectService.confirmShipmentReceived(
                     request.id,
                     request.confirmation
                 );
                 
-                ConfirmShipmentReceivedResponse response = new ConfirmShipmentReceivedResponse();
-                response.isSuccess = true;
-                response.shipment = apiResponse;
-                responses.add(response);
+                responses.add(new ConfirmShipmentReceivedResponse(apiResponse));
             } catch (Exception e) {
-                ConfirmShipmentReceivedResponse response = new ConfirmShipmentReceivedResponse();
-                response.isSuccess = false;
-                response.errorMessage = e.getMessage();
-                responses.add(response);
+                throw new AuraHandledException(e.getMessage());
             }
         }
         
@@ -27,7 +21,7 @@ public class ConfirmShipmentReceivedAction {
     
     public class ConfirmShipmentReceivedRequest {
         @InvocableVariable(required=true label='ID' description='ID of the shipment to confirm.')
-        public Integer id;
+        public String id;
         
         @InvocableVariable(required=true label='Confirmation' description='Confirmation details for the shipment.')
         public WarehouseShipmentConfirmReceivedReq confirmation;
@@ -42,5 +36,11 @@ public class ConfirmShipmentReceivedAction {
         
         @InvocableVariable(required=false label='Shipment' description='The updated warehouse shipment.')
         public WarehouseShipmentDto shipment;
+
+        public ConfirmShipmentReceivedResponse(LacoreConnectService.ApiResponse response) {
+            this.isSuccess = response.isSuccess;
+            this.errorMessage = response.errorMessage;
+            this.shipment = (WarehouseShipmentDto) JSON.deserialize(response.body, WarehouseShipmentDto.class);
+        }
     }
 } 

@@ -1,12 +1,17 @@
+/**
+ * @description Test class for GetWarehouseProductInventoryAction.
+ * This class provides test coverage for retrieving warehouse product inventory,
+ * including successful retrieval, pagination, and error handling scenarios.
+ */
 @IsTest
-private class GetWarehouseProductInventoryActionTest {
+public class GetWarehouseProductInventoryActionTest {
     @TestSetup
-    static void setup() {
+    public static void setup() {
         // Setup test data if needed
     }
     
     @IsTest
-    static void testGetWarehouseProductInventory() {
+    public static void testGetWarehouseProductInventory() {
         // Create test request with all parameters
         GetWarehouseProductInventoryAction.GetWarehouseProductInventoryRequest request = new GetWarehouseProductInventoryAction.GetWarehouseProductInventoryRequest();
         request.item = 'TEST-SKU-001';
@@ -66,7 +71,7 @@ private class GetWarehouseProductInventoryActionTest {
     }
     
     @IsTest
-    static void testGetWarehouseProductInventoryError() {
+    public static void testGetWarehouseProductInventoryError() {
         // Create test request with minimal parameters
         GetWarehouseProductInventoryAction.GetWarehouseProductInventoryRequest request = new GetWarehouseProductInventoryAction.GetWarehouseProductInventoryRequest();
         request.warehouseProductId = 'test-warehouse-product-id';
@@ -88,7 +93,7 @@ private class GetWarehouseProductInventoryActionTest {
     }
     
     @IsTest
-    static void testGetWarehouseProductInventoryWithPagination() {
+    public static void testGetWarehouseProductInventoryWithPagination() {
         // Create test request with pagination parameters
         GetWarehouseProductInventoryAction.GetWarehouseProductInventoryRequest request = new GetWarehouseProductInventoryAction.GetWarehouseProductInventoryRequest();
         request.warehouseProductId = 'test-warehouse-product-id';

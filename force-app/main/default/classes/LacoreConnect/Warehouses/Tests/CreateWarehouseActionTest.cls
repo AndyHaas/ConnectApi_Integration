@@ -1,12 +1,17 @@
+/**
+ * @description Test class for CreateWarehouseAction.
+ * This class provides test coverage for creating warehouses,
+ * including successful creation and error handling scenarios.
+ */
 @IsTest
-private class CreateWarehouseActionTest {
+public class CreateWarehouseActionTest {
     @TestSetup
-    static void setup() {
+    public static void setup() {
         // Setup test data if needed
     }
     
     @IsTest
-    static void testCreateWarehouse() {
+    public static void testCreateWarehouse() {
         // Create test request
         CreateWarehouseAction.CreateWarehouseRequest request = new CreateWarehouseAction.CreateWarehouseRequest();
         request.data = new WarehouseDto();
@@ -45,7 +50,7 @@ private class CreateWarehouseActionTest {
     }
     
     @IsTest
-    static void testCreateWarehouseError() {
+    public static void testCreateWarehouseError() {
         // Create test request with invalid data
         CreateWarehouseAction.CreateWarehouseRequest request = new CreateWarehouseAction.CreateWarehouseRequest();
         request.data = new WarehouseDto();

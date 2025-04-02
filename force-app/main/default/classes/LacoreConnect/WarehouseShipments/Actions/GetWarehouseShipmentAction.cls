@@ -5,17 +5,11 @@ public class GetWarehouseShipmentAction {
         
         for (GetWarehouseShipmentRequest request : requests) {
             try {
-                WarehouseShipmentDto apiResponse = LacoreConnectService.getWarehouseShipmentById(request.id);
+                LacoreConnectService.ApiResponse apiResponse = LacoreConnectService.getWarehouseShipmentById(request.id);
                 
-                GetWarehouseShipmentResponse response = new GetWarehouseShipmentResponse();
-                response.isSuccess = true;
-                response.shipment = apiResponse;
-                responses.add(response);
+                responses.add(new GetWarehouseShipmentResponse(apiResponse));
             } catch (Exception e) {
-                GetWarehouseShipmentResponse response = new GetWarehouseShipmentResponse();
-                response.isSuccess = false;
-                response.errorMessage = e.getMessage();
-                responses.add(response);
+                throw new AuraHandledException(e.getMessage());
             }
         }
         
@@ -24,7 +18,7 @@ public class GetWarehouseShipmentAction {
     
     public class GetWarehouseShipmentRequest {
         @InvocableVariable(required=true label='ID' description='ID of the warehouse shipment to retrieve.')
-        public Integer id;
+        public String id;
     }
     
     public class GetWarehouseShipmentResponse {
@@ -36,5 +30,11 @@ public class GetWarehouseShipmentAction {
         
         @InvocableVariable(required=false label='Shipment' description='The retrieved warehouse shipment.')
         public WarehouseShipmentDto shipment;
+
+        public GetWarehouseShipmentResponse(LacoreConnectService.ApiResponse response) {
+            this.isSuccess = response.isSuccess;
+            this.errorMessage = response.errorMessage;
+            this.shipment = (WarehouseShipmentDto) JSON.deserialize(response.body, WarehouseShipmentDto.class);
+        }
     }
 } 

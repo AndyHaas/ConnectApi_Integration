@@ -5,17 +5,11 @@ public class CreateWarehouseTransferAction {
         
         for (CreateWarehouseTransferRequest request : requests) {
             try {
-                WarehouseShipmentDto apiResponse = LacoreConnectService.createWarehouseTransfer(request.shipment);
+                LacoreConnectService.ApiResponse apiResponse = LacoreConnectService.createWarehouseTransfer(request.shipment);
                 
-                CreateWarehouseTransferResponse response = new CreateWarehouseTransferResponse();
-                response.isSuccess = true;
-                response.shipment = apiResponse;
-                responses.add(response);
+                responses.add(new CreateWarehouseTransferResponse(apiResponse));
             } catch (Exception e) {
-                CreateWarehouseTransferResponse response = new CreateWarehouseTransferResponse();
-                response.isSuccess = false;
-                response.errorMessage = e.getMessage();
-                responses.add(response);
+                throw new AuraHandledException(e.getMessage());
             }
         }
         
@@ -36,5 +30,11 @@ public class CreateWarehouseTransferAction {
         
         @InvocableVariable(required=false label='Shipment' description='The created warehouse shipment.')
         public WarehouseShipmentDto shipment;
+
+        public CreateWarehouseTransferResponse(LacoreConnectService.ApiResponse response) {
+            this.isSuccess = response.isSuccess;
+            this.errorMessage = response.errorMessage;
+            this.shipment = (WarehouseShipmentDto) JSON.deserialize(response.body, WarehouseShipmentDto.class);
+        }
     }
 } 

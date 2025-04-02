@@ -1,12 +1,17 @@
+/**
+ * @description Test class for ListWarehousesAction.
+ * This class provides test coverage for listing warehouses,
+ * including successful retrieval, pagination, and error handling scenarios.
+ */
 @IsTest
-private class ListWarehousesActionTest {
+public class ListWarehousesActionTest {
     @TestSetup
-    static void setup() {
+    public static void setup() {
         // Setup test data if needed
     }
     
     @IsTest
-    static void testListWarehouses() {
+    public static void testListWarehouses() {
         // Create test request
         ListWarehousesAction.ListWarehousesRequest request = new ListWarehousesAction.ListWarehousesRequest();
         request.page = 1;
@@ -61,7 +66,7 @@ private class ListWarehousesActionTest {
     }
     
     @IsTest
-    static void testListWarehousesError() {
+    public static void testListWarehousesError() {
         // Create test request
         ListWarehousesAction.ListWarehousesRequest request = new ListWarehousesAction.ListWarehousesRequest();
         request.page = 1;

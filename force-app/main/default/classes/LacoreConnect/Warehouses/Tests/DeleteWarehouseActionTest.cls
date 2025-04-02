@@ -1,12 +1,17 @@
+/**
+ * @description Test class for DeleteWarehouseAction.
+ * This class provides test coverage for deleting warehouses,
+ * including successful deletion and error handling scenarios.
+ */
 @IsTest
-private class DeleteWarehouseActionTest {
+public class DeleteWarehouseActionTest {
     @TestSetup
-    static void setup() {
+    public static void setup() {
         // Setup test data if needed
     }
     
     @IsTest
-    static void testDeleteWarehouse() {
+    public static void testDeleteWarehouse() {
         // Create test request
         DeleteWarehouseAction.DeleteWarehouseRequest request = new DeleteWarehouseAction.DeleteWarehouseRequest();
         request.warehouseId = 'test-id-1';
@@ -26,7 +31,7 @@ private class DeleteWarehouseActionTest {
     }
     
     @IsTest
-    static void testDeleteWarehouseError() {
+    public static void testDeleteWarehouseError() {
         // Create test request with invalid ID
         DeleteWarehouseAction.DeleteWarehouseRequest request = new DeleteWarehouseAction.DeleteWarehouseRequest();
         request.warehouseId = 'invalid-id';

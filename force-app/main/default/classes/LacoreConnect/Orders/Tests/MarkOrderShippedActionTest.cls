@@ -1,16 +1,21 @@
+/**
+ * @description Test class for MarkOrderShippedAction.
+ * This class provides test coverage for the MarkOrderShippedAction class,
+ * including successful and error scenarios.
+ */
 @IsTest
-private class MarkOrderShippedActionTest {
+public class MarkOrderShippedActionTest {
     private static final String TEST_ORDER_ID = 'test-order-id';
     private static final String TEST_TRACKING_NUMBER = 'test-tracking-number';
     private static final String TEST_CARRIER = 'test-carrier';
     
     @TestSetup
-    static void setup() {
+    public static void setup() {
         Test.setMock(HttpCalloutMock.class, new LacoreConnectServiceMock());
     }
     
     @IsTest
-    static void testMarkOrderShipped() {
+    public static void testMarkOrderShipped() {
         Test.startTest();
         
         MarkOrderShippedAction.MarkOrderShippedRequest request = new MarkOrderShippedAction.MarkOrderShippedRequest();
@@ -28,7 +33,7 @@ private class MarkOrderShippedActionTest {
     }
     
     @IsTest
-    static void testMarkOrderShippedError() {
+    public static void testMarkOrderShippedError() {
         Test.startTest();
         
         // Set up mock to return error
@@ -50,7 +55,7 @@ private class MarkOrderShippedActionTest {
     }
     
     @IsTest
-    static void testMarkOrderShippedMultiple() {
+    public static void testMarkOrderShippedMultiple() {
         Test.startTest();
         
         List<MarkOrderShippedAction.MarkOrderShippedRequest> requests = new List<MarkOrderShippedAction.MarkOrderShippedRequest>();

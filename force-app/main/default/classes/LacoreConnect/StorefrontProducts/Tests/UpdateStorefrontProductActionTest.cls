@@ -1,12 +1,17 @@
+/**
+ * @description Test class for UpdateStorefrontProductAction.
+ * This class provides test coverage for updating storefront products,
+ * including successful updates and error handling scenarios.
+ */
 @IsTest
-private class UpdateStorefrontProductActionTest {
+public class UpdateStorefrontProductActionTest {
     @TestSetup
-    static void setup() {
+    public static void setup() {
         // Setup test data if needed
     }
     
     @IsTest
-    static void testUpdateStorefrontProduct() {
+    public static void testUpdateStorefrontProduct() {
         // Create test request
         UpdateStorefrontProductAction.UpdateStorefrontProductRequest request = new UpdateStorefrontProductAction.UpdateStorefrontProductRequest();
         request.productId = 'test-product-id';
@@ -40,7 +45,7 @@ private class UpdateStorefrontProductActionTest {
     }
     
     @IsTest
-    static void testUpdateStorefrontProductError() {
+    public static void testUpdateStorefrontProductError() {
         // Create test request
         UpdateStorefrontProductAction.UpdateStorefrontProductRequest request = new UpdateStorefrontProductAction.UpdateStorefrontProductRequest();
         request.productId = 'test-product-id';
@@ -64,7 +69,7 @@ private class UpdateStorefrontProductActionTest {
     }
     
     @IsTest
-    static void testUpdateStorefrontProductException() {
+    public static void testUpdateStorefrontProductException() {
         // Create test request with invalid data to trigger exception
         UpdateStorefrontProductAction.UpdateStorefrontProductRequest request = new UpdateStorefrontProductAction.UpdateStorefrontProductRequest();
         request.productId = 'test-product-id';

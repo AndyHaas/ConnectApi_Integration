@@ -1,12 +1,17 @@
+/**
+ * @description Test class for GetStorefrontByIdAction.
+ * This class provides test coverage for retrieving storefronts by ID,
+ * including successful retrieval and error handling scenarios.
+ */
 @IsTest
-private class GetStorefrontByIdActionTest {
+public class GetStorefrontByIdActionTest {
     @TestSetup
-    static void setup() {
+    public static void setup() {
         // Setup test data if needed
     }
     
     @IsTest
-    static void testGetStorefrontById() {
+    public static void testGetStorefrontById() {
         // Create test request
         GetStorefrontByIdAction.GetStorefrontByIdRequest request = new GetStorefrontByIdAction.GetStorefrontByIdRequest();
         request.id = 'test-id-1';
@@ -32,7 +37,7 @@ private class GetStorefrontByIdActionTest {
     }
     
     @IsTest
-    static void testGetStorefrontByIdError() {
+    public static void testGetStorefrontByIdError() {
         // Create test request
         GetStorefrontByIdAction.GetStorefrontByIdRequest request = new GetStorefrontByIdAction.GetStorefrontByIdRequest();
         request.id = 'test-id-1';

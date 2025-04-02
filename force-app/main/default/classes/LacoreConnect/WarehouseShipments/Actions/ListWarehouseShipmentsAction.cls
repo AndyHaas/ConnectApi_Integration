@@ -5,26 +5,16 @@ public class ListWarehouseShipmentsAction {
         
         for (ListWarehouseShipmentsRequest request : requests) {
             try {
-                WarehouseShipmentDtoPaginatedItemsResponse apiResponse = LacoreConnectService.listWarehouseShipments(
+                LacoreConnectService.ApiResponse apiResponse = LacoreConnectService.listWarehouseShipments(
                     request.page,
                     request.pageSize,
                     request.sortBy,
                     request.sortDir
                 );
                 
-                ListWarehouseShipmentsResponse response = new ListWarehouseShipmentsResponse();
-                response.isSuccess = true;
-                response.shipments = apiResponse.items;
-                response.perPage = apiResponse.perPage;
-                response.total = apiResponse.total;
-                response.page = apiResponse.page;
-                response.totalPages = apiResponse.totalPages;
-                responses.add(response);
+                responses.add(new ListWarehouseShipmentsResponse(apiResponse));
             } catch (Exception e) {
-                ListWarehouseShipmentsResponse response = new ListWarehouseShipmentsResponse();
-                response.isSuccess = false;
-                response.errorMessage = e.getMessage();
-                responses.add(response);
+                throw new AuraHandledException(e.getMessage());
             }
         }
         
@@ -46,25 +36,39 @@ public class ListWarehouseShipmentsAction {
     }
     
     public class ListWarehouseShipmentsResponse {
-        @InvocableVariable(required=false label='Is Success' description='Whether the operation was successful.')
+        @InvocableVariable
         public Boolean isSuccess;
         
-        @InvocableVariable(required=false label='Error Message' description='Error message if operation failed.')
+        @InvocableVariable
         public String errorMessage;
         
-        @InvocableVariable(required=false label='Shipments' description='List of warehouse shipments.')
-        public List<WarehouseShipmentDto> shipments;
+        @InvocableVariable
+        public List<WarehouseShipmentDto> items;
         
-        @InvocableVariable(required=false label='Per Page' description='Number of items per page.')
+        @InvocableVariable
         public Integer perPage;
         
-        @InvocableVariable(required=false label='Total' description='Total number of items.')
+        @InvocableVariable
         public Integer total;
         
-        @InvocableVariable(required=false label='Page' description='Current page number.')
+        @InvocableVariable
         public Integer page;
         
-        @InvocableVariable(required=false label='Total Pages' description='Total number of pages.')
+        @InvocableVariable
         public Integer totalPages;
+
+        public ListWarehouseShipmentsResponse(LacoreConnectService.ApiResponse response) {
+            this.isSuccess = response.isSuccess;
+            this.errorMessage = response.errorMessage;
+            
+            if (response.isSuccess && response.body != null) {
+                PaginatedResponseDto paginatedResponse = (PaginatedResponseDto) JSON.deserialize(response.body, PaginatedResponseDto.class);
+                this.items = (List<WarehouseShipmentDto>) JSON.deserialize(JSON.serialize(paginatedResponse.items), List<WarehouseShipmentDto>.class);
+                this.perPage = paginatedResponse.perPage;
+                this.total = paginatedResponse.total;
+                this.page = paginatedResponse.page;
+                this.totalPages = paginatedResponse.totalPages;
+            }
+        }       
     }
 } 

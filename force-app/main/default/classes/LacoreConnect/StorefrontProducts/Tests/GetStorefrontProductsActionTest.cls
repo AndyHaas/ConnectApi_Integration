@@ -1,13 +1,18 @@
+/**
+ * @description Test class for GetStorefrontProductsAction.
+ * This class provides test coverage for listing storefront products,
+ * including successful retrieval and error handling scenarios.
+ */
 @IsTest
-private class GetStorefrontProductsActionTest {
+public class GetStorefrontProductsActionTest {
     
     @TestSetup
-    static void setup() {
+    public static void setup() {
         // Add any test setup if needed
     }
     
     @IsTest
-    static void testGetStorefrontProducts() {
+    public static void testGetStorefrontProducts() {
         Test.startTest();
         
         // Create test request
@@ -35,7 +40,7 @@ private class GetStorefrontProductsActionTest {
     }
     
     @IsTest
-    static void testErrorHandling() {
+    public static void testErrorHandling() {
         Test.startTest();
         
         // Create test request with missing required fields

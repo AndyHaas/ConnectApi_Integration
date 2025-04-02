@@ -1,4 +1,4 @@
-public class WarehouseShipmentDtoPaginatedItemsResponse {
+public class WarehouseShipmentDtoPaginatedItemsResp {
     @AuraEnabled
     public List<WarehouseShipmentDto> items { get; set; }
     

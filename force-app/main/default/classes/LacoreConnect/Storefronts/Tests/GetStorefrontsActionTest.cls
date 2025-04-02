@@ -1,12 +1,17 @@
+/**
+ * @description Test class for GetStorefrontsAction.
+ * This class provides test coverage for listing storefronts,
+ * including successful retrieval and error handling scenarios.
+ */
 @IsTest
-private class GetStorefrontsActionTest {
+public class GetStorefrontsActionTest {
     @TestSetup
-    static void setup() {
+    public static void setup() {
         // Setup test data if needed
     }
     
     @IsTest
-    static void testGetStorefronts() {
+    public static void testGetStorefronts() {
         // Create test request
         GetStorefrontsAction.GetStorefrontsRequest request = new GetStorefrontsAction.GetStorefrontsRequest();
         request.page = 1;
@@ -34,7 +39,7 @@ private class GetStorefrontsActionTest {
     }
     
     @IsTest
-    static void testGetStorefrontsError() {
+    public static void testGetStorefrontsError() {
         // Create test request
         GetStorefrontsAction.GetStorefrontsRequest request = new GetStorefrontsAction.GetStorefrontsRequest();
         

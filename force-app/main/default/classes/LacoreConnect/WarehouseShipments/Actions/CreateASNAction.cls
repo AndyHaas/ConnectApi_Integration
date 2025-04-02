@@ -5,17 +5,11 @@ public class CreateASNAction {
         
         for (CreateASNRequest request : requests) {
             try {
-                WarehouseShipmentDto apiResponse = LacoreConnectService.createASN(request.shipment);
+                LacoreConnectService.ApiResponse apiResponse = LacoreConnectService.createASN(request.shipment);
                 
-                CreateASNResponse response = new CreateASNResponse();
-                response.isSuccess = true;
-                response.shipment = apiResponse;
-                responses.add(response);
+                responses.add(new CreateASNResponse(apiResponse));
             } catch (Exception e) {
-                CreateASNResponse response = new CreateASNResponse();
-                response.isSuccess = false;
-                response.errorMessage = e.getMessage();
-                responses.add(response);
+                throw new AuraHandledException(e.getMessage());
             }
         }
         
@@ -36,5 +30,11 @@ public class CreateASNAction {
         
         @InvocableVariable(required=false label='Shipment' description='The created ASN shipment.')
         public WarehouseShipmentDto shipment;
+
+        public CreateASNResponse(LacoreConnectService.ApiResponse response) {
+            this.isSuccess = response.isSuccess;
+            this.errorMessage = response.errorMessage;
+            this.shipment = (WarehouseShipmentDto) JSON.deserialize(response.body, WarehouseShipmentDto.class);
+        }
     }
 } 

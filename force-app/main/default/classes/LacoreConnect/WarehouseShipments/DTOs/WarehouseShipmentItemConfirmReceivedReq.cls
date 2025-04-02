@@ -13,4 +13,10 @@ public class WarehouseShipmentItemConfirmReceivedReq {
     
     @AuraEnabled
     public DateTime expiresDateTimeUtc { get; set; }
+
+    @AuraEnabled
+    public String warehouseShipmentItemId { get; set; }
+
+    @AuraEnabled
+    public String note { get; set; }
 } 

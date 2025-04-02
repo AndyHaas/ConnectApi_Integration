@@ -1,13 +1,18 @@
+/**
+ * @description Test class for ListShipmentsAction.
+ * This class provides test coverage for the ListShipmentsAction class,
+ * including successful shipment listing and error handling scenarios.
+ */
 @IsTest
-private class ListShipmentsActionTest {
+public class ListShipmentsActionTest {
     
     @TestSetup
-    static void setup() {
+    public static void setup() {
         // Create test data
     }
     
     @IsTest
-    static void testListShipments() {
+    public static void testListShipments() {
         // Prepare test request
         ListShipmentsAction.ListShipmentsRequest request = new ListShipmentsAction.ListShipmentsRequest();
         request.brandId = 'test-brand-id';
@@ -32,7 +37,7 @@ private class ListShipmentsActionTest {
     }
     
     @IsTest
-    static void testErrorHandling() {
+    public static void testErrorHandling() {
         Test.startTest();
         
         // Create test request with missing required fields
@@ -51,7 +56,7 @@ private class ListShipmentsActionTest {
     }
     
     @IsTest
-    static void testListShipmentsWithOptionalFields() {
+    public static void testListShipmentsWithOptionalFields() {
         // Prepare test request with only required fields
         ListShipmentsAction.ListShipmentsRequest request = new ListShipmentsAction.ListShipmentsRequest();
         request.brandId = 'test-brand-id';

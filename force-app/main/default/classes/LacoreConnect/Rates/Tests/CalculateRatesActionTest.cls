@@ -1,13 +1,18 @@
+/**
+ * @description Test class for CalculateRatesAction.
+ * This class provides test coverage for the CalculateRatesAction class,
+ * including successful rate calculations and error handling scenarios.
+ */
 @IsTest
-private class CalculateRatesActionTest {
+public class CalculateRatesActionTest {
     
     @TestSetup
-    static void setup() {
+    public static void setup() {
         // Create test data
     }
     
     @IsTest
-    static void testCalculateRates() {
+    public static void testCalculateRates() {
         // Prepare test request
         CalculateRatesAction.CalculateRatesRequest request = new CalculateRatesAction.CalculateRatesRequest();
         request.brandId = 'test-brand-id';
@@ -41,7 +46,7 @@ private class CalculateRatesActionTest {
     }
     
     @IsTest
-    static void testErrorHandling() {
+    public static void testErrorHandling() {
         Test.startTest();
         
         // Create test request with missing required fields
@@ -60,7 +65,7 @@ private class CalculateRatesActionTest {
     }
     
     @IsTest
-    static void testCalculateRatesWithMultipleItems() {
+    public static void testCalculateRatesWithMultipleItems() {
         // Prepare test request
         CalculateRatesAction.CalculateRatesRequest request = new CalculateRatesAction.CalculateRatesRequest();
         request.brandId = 'test-brand-id';

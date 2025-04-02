@@ -1,7 +1,18 @@
+/**
+ * @description Test class for CreateASNAction.
+ * This class provides test coverage for creating Advanced Shipping Notices (ASN),
+ * including successful creation and error handling scenarios.
+ */
 @IsTest
-private class CreateASNActionTest {
+public class CreateASNActionTest {
+    
+    @TestSetup
+    public static void setup() {
+        Test.setMock(HttpCalloutMock.class, new LacoreConnectServiceMock());
+    }
+    
     @IsTest
-    static void testCreateASNSuccess() {
+    public static void testCreateASNSuccess() {
         // Create test data
         WarehouseShipmentDto mockResponse = new WarehouseShipmentDto();
         mockResponse.id = '1';
@@ -9,21 +20,21 @@ private class CreateASNActionTest {
         mockResponse.type = 2; // ASN type
         mockResponse.status = 'Pending';
         
-        // Create a mock for LacoreConnectService
-        Test.startTest();
-        LacoreConnectService.setMock(new LacoreConnectServiceMock(mockResponse));
+        // Set up mock to return success response
+        Test.setMock(HttpCalloutMock.class, new LacoreConnectServiceMock(200, 'Success', JSON.serialize(mockResponse)));
         
         // Create request
         WarehouseShipmentCreateReq shipment = new WarehouseShipmentCreateReq();
         shipment.name = 'Test ASN';
-        shipment.vendorId = 1;
-        shipment.toWarehouseId = 2;
+        shipment.vendorId = '1';
+        shipment.toWarehouseId = '2';
         shipment.type = 'ASN';
         
         CreateASNAction.CreateASNRequest request = new CreateASNAction.CreateASNRequest();
         request.shipment = shipment;
         
         // Execute the action
+        Test.startTest();
         List<CreateASNAction.CreateASNResponse> responses = 
             CreateASNAction.execute(new List<CreateASNAction.CreateASNRequest>{request});
         Test.stopTest();
@@ -37,10 +48,9 @@ private class CreateASNActionTest {
     }
     
     @IsTest
-    static void testCreateASNError() {
-        // Create a mock for LacoreConnectService that throws an exception
-        Test.startTest();
-        LacoreConnectService.setMock(new LacoreConnectServiceMock(new CalloutException('Test error')));
+    public static void testCreateASNError() {
+        // Set up mock to return error response
+        Test.setMock(HttpCalloutMock.class, new LacoreConnectServiceMock(400, 'Bad Request', '{"error":"invalid_request","message":"Invalid shipment data","details":["Invalid parameters"]}'));
         
         // Create request
         WarehouseShipmentCreateReq shipment = new WarehouseShipmentCreateReq();
@@ -50,6 +60,7 @@ private class CreateASNActionTest {
         request.shipment = shipment;
         
         // Execute the action
+        Test.startTest();
         List<CreateASNAction.CreateASNResponse> responses = 
             CreateASNAction.execute(new List<CreateASNAction.CreateASNRequest>{request});
         Test.stopTest();
@@ -58,6 +69,6 @@ private class CreateASNActionTest {
         System.assertEquals(1, responses.size(), 'Should return one response');
         CreateASNAction.CreateASNResponse response = responses[0];
         System.assert(!response.isSuccess, 'Response should not be successful');
-        System.assertEquals('Test error', response.errorMessage, 'Should return correct error message');
+        System.assertEquals('Invalid shipment data', response.errorMessage, 'Should return correct error message');
     }
 } 

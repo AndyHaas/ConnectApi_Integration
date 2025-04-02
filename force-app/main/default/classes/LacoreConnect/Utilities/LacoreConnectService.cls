@@ -1,11 +1,23 @@
+/**
+ * @description Main service class for interacting with the LacoreConnect API.
+ * This class extends RestClientLib to provide REST API functionality and implements
+ * a singleton pattern for efficient resource usage.
+ */
 public class LacoreConnectService extends RestClientLib {
     private static final String NAMED_CREDENTIAL = 'LacoreConnect';
     private static LacoreConnectService instance;
     
+    /**
+     * @description Private constructor to enforce singleton pattern
+     */
     private LacoreConnectService() {
         super(NAMED_CREDENTIAL);
     }
     
+    /**
+     * @description Gets the singleton instance of LacoreConnectService
+     * @return LacoreConnectService The singleton instance
+     */
     public static LacoreConnectService getInstance() {
         if (instance == null) {
             instance = new LacoreConnectService();
@@ -13,22 +25,42 @@ public class LacoreConnectService extends RestClientLib {
         return instance;
     }
     
+    /**
+     * @description Inner class to represent API responses
+     */
+    @TestVisible
     public class ApiResponse {
+        /** HTTP status code of the response */
         public Integer statusCode;
+        /** Raw response body */
         public String body;
+        /** Whether the request was successful */
         public Boolean isSuccess;
+        /** Error message if the request failed */
         public String errorMessage;
+        /** Error code if the request failed */
         public String errorCode;
+        /** Detailed error information */
         public String errorDetails;
+        /** Additional error data as a map */
         public Map<String, Object> errorData;
     }
     
+    /**
+     * @description Gets the default headers for API requests
+     * @return Map<String, String> Map of default headers
+     */
     private static Map<String, String> getDefaultHeaders() {
         return new Map<String, String>{
             'Content-Type' => 'application/json'
         };
     }
     
+    /**
+     * @description Handles the HTTP response and converts it to an ApiResponse object
+     * @param httpResponse The raw HTTP response from the API
+     * @return ApiResponse Processed API response
+     */
     private static ApiResponse handleResponse(HttpResponse httpResponse) {
         ApiResponse response = new ApiResponse();
         
@@ -85,11 +117,11 @@ public class LacoreConnectService extends RestClientLib {
                     }
                 }
             } catch (Exception e) {
-                // If we can't parse the error response, use a generic error
-                response.errorMessage = 'Failed to parse error response';
+                response.isSuccess = false;
+                response.errorMessage = 'Failed to parse error response: ' + e.getMessage();
                 response.errorCode = 'PARSE_ERROR';
-                response.errorDetails = response.body;
-                response.errorData = new Map<String, Object>{ 'rawResponse' => response.body };
+                response.errorDetails = e.getMessage();
+                response.errorData = new Map<String, Object>{ 'exception' => e.getMessage() };
             }
         }
         
@@ -161,22 +193,29 @@ public class LacoreConnectService extends RestClientLib {
         return handleResponse(getInstance().del(endpoint + queryString));
     }
     
-    public static ApiResponse listOrders(String brandId, String warehouseId, String status, Integer page, Integer pageSize, String sortBy, String sortDir) {
+    public static ApiResponse listOrders(String storefrontId, Integer page, Integer pageSize, String sortBy, String sortDir, Date createdDateStart, Date createdDateEnd, Date orderDateStart, Date orderDateEnd, String orderNumber, String orderStatus) {
         String endpoint = '/orders';
         String queryString = HttpUtils.buildQueryString(new Map<String, String>{
-            'brandId' => brandId,
-            'warehouseId' => warehouseId,
-            'status' => status,
+            'storefrontId' => storefrontId,
             'page' => String.valueOf(page),
             'pageSize' => String.valueOf(pageSize),
             'sortBy' => sortBy,
-            'sortDir' => sortDir
+            'sortDir' => sortDir,
+            'createdDateStart' => String.valueOf(createdDateStart),
+            'createdDateEnd' => String.valueOf(createdDateEnd),
+            'orderDateStart' => String.valueOf(orderDateStart),
+            'orderDateEnd' => String.valueOf(orderDateEnd),
+            'orderNumber' => orderNumber,
+            'orderStatus' => orderStatus
         });
         return handleResponse(getInstance().get(endpoint + queryString));
     }
     
     public static ApiResponse cancelOrder(String id) {
-        return handleResponse(getInstance().post('/orders/' + id + '/cancel', ''));
+        Map<String, Object> requestBody = new Map<String, Object>{
+            'orderStatus' => 'cancelled'
+        };
+        return handleResponse(getInstance().post('/orders/' + id + '/orderStatus', DTOs.serialize(requestBody)));
     }
     
     public static ApiResponse markOrderShipped(String id, String trackingNumber, String carrier) {
@@ -189,7 +228,7 @@ public class LacoreConnectService extends RestClientLib {
     
     public static ApiResponse updateOrderStatus(String id, String status) {
         Map<String, Object> requestBody = new Map<String, Object>{
-            'status' => status
+            'orderStatus' => status
         };
         return handleResponse(getInstance().post('/orders/' + id + '/orderStatus', DTOs.serialize(requestBody)));
     }
@@ -509,11 +548,15 @@ public class LacoreConnectService extends RestClientLib {
         return handleResponse(getInstance().put('/v2/inventory/shipments/' + id + '/confirmReceived', DTOs.serialize(confirmation)));
     }
     
-    public static ApiResponse markShipmentInTransit(String id, WarehouseShipmentMarkInTransitReq transitRequest) {
-        return handleResponse(getInstance().put('/v2/inventory/shipments/' + id + '/markInTransit', DTOs.serialize(transitRequest)));
+    public static ApiResponse markShipmentInTransit(String id) {
+        return handleResponse(getInstance().put('/v2/inventory/shipments/' + id + '/markInTransit',''));
     }
     
-    public static ApiResponse cancelShipment(String id, WarehouseShipmentCancelReq cancelRequest) {
-        return handleResponse(getInstance().put('/v2/inventory/shipments/' + id + '/cancel', DTOs.serialize(cancelRequest)));
+    public static ApiResponse cancelShipment(String id) {
+        return handleResponse(getInstance().put('/v2/inventory/shipments/' + id + '/cancel', ''));
+    }
+
+    public static ApiResponse getWarehouseShipmentById(String id) {
+        return handleResponse(getInstance().get('/v2/inventory/shipments/' + id));
     }
 } 

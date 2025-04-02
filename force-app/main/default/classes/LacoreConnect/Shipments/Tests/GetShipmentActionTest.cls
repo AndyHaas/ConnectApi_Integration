@@ -1,13 +1,18 @@
+/**
+ * @description Test class for GetShipmentAction.
+ * This class provides test coverage for the GetShipmentAction class,
+ * including successful shipment retrieval and error handling scenarios.
+ */
 @IsTest
-private class GetShipmentActionTest {
+public class GetShipmentActionTest {
     
     @TestSetup
-    static void setup() {
+    public static void setup() {
         // Create test data
     }
     
     @IsTest
-    static void testGetShipment() {
+    public static void testGetShipment() {
         // Prepare test request
         GetShipmentAction.GetShipmentRequest request = new GetShipmentAction.GetShipmentRequest();
         request.id = 'test-shipment-id';
@@ -26,7 +31,7 @@ private class GetShipmentActionTest {
     }
     
     @IsTest
-    static void testErrorHandling() {
+    public static void testErrorHandling() {
         Test.startTest();
         
         // Create test request with missing required fields

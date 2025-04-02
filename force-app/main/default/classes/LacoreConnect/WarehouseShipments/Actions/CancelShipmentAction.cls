@@ -1,24 +1,25 @@
+/**
+ * @description Action to cancel a warehouse shipment
+ */
 public class CancelShipmentAction {
-    @InvocableMethod(label='Cancel Shipment' description='Cancels a warehouse shipment.')
+    /**
+     * @description Invocable method to cancel a warehouse shipment
+     * @param requests List of CancelShipmentRequest objects
+     * @return List of CancelShipmentResponse objects
+     */
+    @InvocableMethod(label='Cancel Shipment' description='Cancels a warehouse shipment.' category='Lacore Connect')
     public static List<CancelShipmentResponse> execute(List<CancelShipmentRequest> requests) {
         List<CancelShipmentResponse> responses = new List<CancelShipmentResponse>();
         
         for (CancelShipmentRequest request : requests) {
             try {
-                WarehouseShipmentDto apiResponse = LacoreConnectService.cancelShipment(
-                    request.id,
-                    request.cancelRequest
+                LacoreConnectService.ApiResponse apiResponse = LacoreConnectService.cancelShipment(
+                    request.id
                 );
                 
-                CancelShipmentResponse response = new CancelShipmentResponse();
-                response.isSuccess = true;
-                response.shipment = apiResponse;
-                responses.add(response);
+                responses.add(new CancelShipmentResponse(apiResponse));
             } catch (Exception e) {
-                CancelShipmentResponse response = new CancelShipmentResponse();
-                response.isSuccess = false;
-                response.errorMessage = e.getMessage();
-                responses.add(response);
+                throw new AuraHandledException(e.getMessage());
             }
         }
         
@@ -27,20 +28,26 @@ public class CancelShipmentAction {
     
     public class CancelShipmentRequest {
         @InvocableVariable(required=true label='ID' description='ID of the shipment to cancel.')
-        public Integer id;
+        public String id;
         
         @InvocableVariable(required=true label='Cancel Request' description='Cancel request details.')
         public WarehouseShipmentCancelReq cancelRequest;
     }
     
     public class CancelShipmentResponse {
-        @InvocableVariable(required=false label='Is Success' description='Whether the operation was successful.')
+        @InvocableVariable
         public Boolean isSuccess;
         
-        @InvocableVariable(required=false label='Error Message' description='Error message if operation failed.')
+        @InvocableVariable
         public String errorMessage;
         
-        @InvocableVariable(required=false label='Shipment' description='The updated warehouse shipment.')
+        @InvocableVariable
         public WarehouseShipmentDto shipment;
+
+        public CancelShipmentResponse(LacoreConnectService.ApiResponse response) {
+            this.isSuccess = response.isSuccess;
+            this.errorMessage = response.errorMessage;
+            this.shipment = (WarehouseShipmentDto) JSON.deserialize(response.body, WarehouseShipmentDto.class);
+        }
     }
 } 

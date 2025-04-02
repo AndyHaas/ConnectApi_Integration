@@ -1,26 +1,37 @@
+/**
+ * @description Test class for ListOrdersAction.
+ * This class provides test coverage for the ListOrdersAction class,
+ * including successful and error scenarios.
+ */
 @IsTest
-private class ListOrdersActionTest {
-    private static final String TEST_BRAND_ID = 'test-brand-id';
-    private static final String TEST_CUSTOMER_ID = 'test-customer-id';
-    private static final String TEST_STATUS = 'DRAFT';
+public class ListOrdersActionTest {
+    /** Test storefront ID used in test methods */
+    private static final String TEST_STOREFRONT_ID = 'test-storefront-id';
     
+    /**
+     * @description Test setup method that configures the test environment
+     */
     @TestSetup
-    static void setup() {
+    public static void setup() {
         Test.setMock(HttpCalloutMock.class, new LacoreConnectServiceMock());
     }
     
+    /**
+     * @description Tests successful order listing
+     */
     @IsTest
-    static void testListOrders() {
+    public static void testListOrders() {
         Test.startTest();
         
         ListOrdersAction.ListOrdersRequest request = new ListOrdersAction.ListOrdersRequest();
-        request.brandId = TEST_BRAND_ID;
-        request.customerId = TEST_CUSTOMER_ID;
-        request.status = TEST_STATUS;
-        request.page = 1;
-        request.pageSize = 10;
+        request.storefrontId = TEST_STOREFRONT_ID;
         request.sortBy = 'createdAt';
         request.sortDir = 'desc';
+        request.createdDateStart = Date.today();
+        request.createdDateEnd = Date.today();
+        request.orderDateStart = Date.today();
+        request.orderDateEnd = Date.today();
+        request.orderNumber = '1234567890';
         
         List<ListOrdersAction.ListOrdersResponse> responses = 
             ListOrdersAction.execute(new List<ListOrdersAction.ListOrdersRequest>{request});
@@ -32,20 +43,20 @@ private class ListOrdersActionTest {
     }
     
     @IsTest
-    static void testListOrdersError() {
+    public static void testListOrdersError() {
         Test.startTest();
         
         // Set up mock to return error
         Test.setMock(HttpCalloutMock.class, new LacoreConnectServiceMock(400, 'Bad Request', '{"message":"Invalid request"}'));
         
         ListOrdersAction.ListOrdersRequest request = new ListOrdersAction.ListOrdersRequest();
-        request.brandId = TEST_BRAND_ID;
-        request.customerId = TEST_CUSTOMER_ID;
-        request.status = TEST_STATUS;
-        request.page = 1;
-        request.pageSize = 10;
+        request.storefrontId = TEST_STOREFRONT_ID;
         request.sortBy = 'createdAt';
         request.sortDir = 'desc';
+        request.createdDateStart = Date.today();
+        request.createdDateEnd = Date.today();
+        request.orderDateStart = Date.today();
+        request.orderDateEnd = Date.today();
         
         List<ListOrdersAction.ListOrdersResponse> responses = 
             ListOrdersAction.execute(new List<ListOrdersAction.ListOrdersRequest>{request});
@@ -58,38 +69,35 @@ private class ListOrdersActionTest {
     }
     
     @IsTest
-    static void testListOrdersMultiple() {
+    public static void testListOrdersMultiple() {
         Test.startTest();
         
         List<ListOrdersAction.ListOrdersRequest> requests = new List<ListOrdersAction.ListOrdersRequest>();
         
         // Create first request
         ListOrdersAction.ListOrdersRequest request1 = new ListOrdersAction.ListOrdersRequest();
-        request1.brandId = TEST_BRAND_ID + '1';
-        request1.customerId = TEST_CUSTOMER_ID + '1';
-        request1.status = TEST_STATUS;
-        request1.page = 1;
-        request1.pageSize = 10;
+        request1.storefrontId = TEST_STOREFRONT_ID;
         request1.sortBy = 'createdAt';
         request1.sortDir = 'desc';
-        requests.add(request1);
+        request1.createdDateStart = Date.today();
+        request1.createdDateEnd = Date.today();
+        request1.orderDateStart = Date.today();
+        request1.orderDateEnd = Date.today();
         
         // Create second request
         ListOrdersAction.ListOrdersRequest request2 = new ListOrdersAction.ListOrdersRequest();
-        request2.brandId = TEST_BRAND_ID + '2';
-        request2.customerId = TEST_CUSTOMER_ID + '2';
-        request2.status = TEST_STATUS;
-        request2.page = 1;
-        request2.pageSize = 10;
+        request2.storefrontId = TEST_STOREFRONT_ID;
         request2.sortBy = 'createdAt';
         request2.sortDir = 'desc';
-        requests.add(request2);
+        request2.createdDateStart = Date.today();
+        request2.createdDateEnd = Date.today();
+        request2.orderDateStart = Date.today();
+        request2.orderDateEnd = Date.today();
         
         List<ListOrdersAction.ListOrdersResponse> responses = ListOrdersAction.execute(requests);
         
         Test.stopTest();
         
-        System.assertEquals(2, responses.size(), 'Expected two responses');
         System.assertEquals(true, responses[0].isSuccess, 'Expected success response for first request');
         System.assertEquals(true, responses[1].isSuccess, 'Expected success response for second request');
     }

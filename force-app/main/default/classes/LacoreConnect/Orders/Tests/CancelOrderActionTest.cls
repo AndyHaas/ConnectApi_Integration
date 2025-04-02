@@ -1,15 +1,28 @@
+/**
+ * @description Test class for CancelOrderAction.
+ * This class provides test coverage for the CancelOrderAction class,
+ * including successful and error scenarios.
+ */
 @IsTest
-private class CancelOrderActionTest {
+public class CancelOrderActionTest {
+    /** Test order ID used in test methods */
     private static final String TEST_ORDER_ID = 'test-order-id';
+    /** Test cancellation reason used in test methods */
     private static final String TEST_REASON = 'Customer requested cancellation';
     
+    /**
+     * @description Test setup method that configures the test environment
+     */
     @TestSetup
-    static void setup() {
+    public static void setup() {
         Test.setMock(HttpCalloutMock.class, new LacoreConnectServiceMock());
     }
     
+    /**
+     * @description Tests successful order cancellation
+     */
     @IsTest
-    static void testCancelOrder() {
+    public static void testCancelOrder() {
         Test.startTest();
         
         CancelOrderAction.CancelOrderRequest request = new CancelOrderAction.CancelOrderRequest();
@@ -24,8 +37,11 @@ private class CancelOrderActionTest {
         System.assertEquals(true, responses[0].success, 'Expected success response');
     }
     
+    /**
+     * @description Tests error handling when order cancellation fails
+     */
     @IsTest
-    static void testCancelOrderError() {
+    public static void testCancelOrderError() {
         Test.startTest();
         
         // Set up mock to return error
@@ -44,8 +60,11 @@ private class CancelOrderActionTest {
         System.assertEquals('Order cannot be cancelled', responses[0].message, 'Expected error message');
     }
     
+    /**
+     * @description Tests handling multiple order cancellations
+     */
     @IsTest
-    static void testCancelOrderMultiple() {
+    public static void testCancelOrderMultiple() {
         Test.startTest();
         
         List<CancelOrderAction.CancelOrderRequest> requests = new List<CancelOrderAction.CancelOrderRequest>();

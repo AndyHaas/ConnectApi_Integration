@@ -1,3 +1,7 @@
+/**
+ * @description DTO for advanced shipping options
+ */
+@TestVisible
 public class AdvancedOptionsDto {
     @AuraEnabled public Integer warehouseId;
     @AuraEnabled public Boolean nonMachinable;

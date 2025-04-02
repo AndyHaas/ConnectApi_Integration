@@ -1,7 +1,12 @@
+/**
+ * @description Test class for CreateWarehouseTransferAction.
+ * This class provides test coverage for creating warehouse transfers,
+ * including successful creation and error handling scenarios.
+ */
 @IsTest
-private class CreateWarehouseTransferActionTest {
+public class CreateWarehouseTransferActionTest {
     @IsTest
-    static void testCreateWarehouseTransferSuccess() {
+    public static void testCreateWarehouseTransferSuccess() {
         // Create test data
         WarehouseShipmentDto mockResponse = new WarehouseShipmentDto();
         mockResponse.id = '1';
@@ -9,15 +14,14 @@ private class CreateWarehouseTransferActionTest {
         mockResponse.type = 1; // Transfer type
         mockResponse.status = 'Pending';
         
-        // Create a mock for LacoreConnectService
-        Test.startTest();
-        LacoreConnectService.setMock(new LacoreConnectServiceMock(mockResponse));
+        // Set up mock to return success response
+        Test.setMock(HttpCalloutMock.class, new LacoreConnectServiceMock(200, 'Success', JSON.serialize(mockResponse)));
         
         // Create request
         WarehouseShipmentCreateReq shipment = new WarehouseShipmentCreateReq();
         shipment.name = 'Test Transfer';
-        shipment.fromWarehouseId = 1;
-        shipment.toWarehouseId = 2;
+        shipment.fromWarehouseId = '1';   
+        shipment.toWarehouseId = '2';
         shipment.type = 'Transfer';
         
         CreateWarehouseTransferAction.CreateWarehouseTransferRequest request = new CreateWarehouseTransferAction.CreateWarehouseTransferRequest();
@@ -37,10 +41,9 @@ private class CreateWarehouseTransferActionTest {
     }
     
     @IsTest
-    static void testCreateWarehouseTransferError() {
-        // Create a mock for LacoreConnectService that throws an exception
-        Test.startTest();
-        LacoreConnectService.setMock(new LacoreConnectServiceMock(new CalloutException('Test error')));
+    public static void testCreateWarehouseTransferError() {
+        // Set up mock to return error response
+        Test.setMock(HttpCalloutMock.class, new LacoreConnectServiceMock(400, 'Bad Request', '{"error":"invalid_request","message":"Invalid shipment data","details":["Invalid parameters"]}'));
         
         // Create request
         WarehouseShipmentCreateReq shipment = new WarehouseShipmentCreateReq();

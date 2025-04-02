@@ -1,16 +1,26 @@
+/**
+ * @description Test class for ConfirmShipmentReceivedAction.
+ * This class provides test coverage for confirming receipt of warehouse shipments,
+ * including successful confirmation and error handling scenarios.
+ */
 @IsTest
-private class ConfirmShipmentReceivedActionTest {
+public class ConfirmShipmentReceivedActionTest {
+    
+    @TestSetup
+    public static void setup() {
+        Test.setMock(HttpCalloutMock.class, new LacoreConnectServiceMock());
+    }
+    
     @IsTest
-    static void testConfirmShipmentReceivedSuccess() {
+    public static void testConfirmShipmentReceivedSuccess() {
         // Create test data
         WarehouseShipmentDto mockResponse = new WarehouseShipmentDto();
         mockResponse.id = '1';
         mockResponse.name = 'Test Shipment';
         mockResponse.status = 'Received';
         
-        // Create a mock for LacoreConnectService
-        Test.startTest();
-        LacoreConnectService.setMock(new LacoreConnectServiceMock(mockResponse));
+        // Set up mock to return success response
+        Test.setMock(HttpCalloutMock.class, new LacoreConnectServiceMock(200, 'Success', JSON.serialize(mockResponse)));
         
         // Create request
         WarehouseShipmentConfirmReceivedReq confirmation = new WarehouseShipmentConfirmReceivedReq();
@@ -24,10 +34,11 @@ private class ConfirmShipmentReceivedActionTest {
         confirmation.items = new List<WarehouseShipmentItemConfirmReceivedReq>{item};
         
         ConfirmShipmentReceivedAction.ConfirmShipmentReceivedRequest request = new ConfirmShipmentReceivedAction.ConfirmShipmentReceivedRequest();
-        request.id = 1;
+        request.id = '1';
         request.confirmation = confirmation;
         
         // Execute the action
+        Test.startTest();
         List<ConfirmShipmentReceivedAction.ConfirmShipmentReceivedResponse> responses = 
             ConfirmShipmentReceivedAction.execute(new List<ConfirmShipmentReceivedAction.ConfirmShipmentReceivedRequest>{request});
         Test.stopTest();
@@ -41,20 +52,20 @@ private class ConfirmShipmentReceivedActionTest {
     }
     
     @IsTest
-    static void testConfirmShipmentReceivedError() {
-        // Create a mock for LacoreConnectService that throws an exception
-        Test.startTest();
-        LacoreConnectService.setMock(new LacoreConnectServiceMock(new CalloutException('Test error')));
+    public static void testConfirmShipmentReceivedError() {
+        // Set up mock to return error response
+        Test.setMock(HttpCalloutMock.class, new LacoreConnectServiceMock(400, 'Bad Request', '{"error":"invalid_request","message":"Invalid shipment data","details":["Invalid parameters"]}'));
         
         // Create request
         WarehouseShipmentConfirmReceivedReq confirmation = new WarehouseShipmentConfirmReceivedReq();
         confirmation.note = 'Test confirmation';
         
         ConfirmShipmentReceivedAction.ConfirmShipmentReceivedRequest request = new ConfirmShipmentReceivedAction.ConfirmShipmentReceivedRequest();
-        request.id = 1;
+        request.id = '1';
         request.confirmation = confirmation;
         
         // Execute the action
+        Test.startTest();
         List<ConfirmShipmentReceivedAction.ConfirmShipmentReceivedResponse> responses = 
             ConfirmShipmentReceivedAction.execute(new List<ConfirmShipmentReceivedAction.ConfirmShipmentReceivedRequest>{request});
         Test.stopTest();
@@ -63,6 +74,6 @@ private class ConfirmShipmentReceivedActionTest {
         System.assertEquals(1, responses.size(), 'Should return one response');
         ConfirmShipmentReceivedAction.ConfirmShipmentReceivedResponse response = responses[0];
         System.assert(!response.isSuccess, 'Response should not be successful');
-        System.assertEquals('Test error', response.errorMessage, 'Should return correct error message');
+        System.assertEquals('Invalid shipment data', response.errorMessage, 'Should return correct error message');
     }
 } 

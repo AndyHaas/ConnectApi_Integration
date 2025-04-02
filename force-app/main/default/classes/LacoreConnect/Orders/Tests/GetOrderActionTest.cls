@@ -1,14 +1,26 @@
+/**
+ * @description Test class for GetOrderAction.
+ * This class provides test coverage for the GetOrderAction class,
+ * including successful and error scenarios.
+ */
 @IsTest
-private class GetOrderActionTest {
+public class GetOrderActionTest {
+    /** Test order ID used in test methods */
     private static final String TEST_ORDER_ID = 'test-order-id';
     
+    /**
+     * @description Test setup method that configures the test environment
+     */
     @TestSetup
-    static void setup() {
+    public static void setup() {
         Test.setMock(HttpCalloutMock.class, new LacoreConnectServiceMock());
     }
     
+    /**
+     * @description Tests successful order retrieval
+     */
     @IsTest
-    static void testGetOrder() {
+    public static void testGetOrder() {
         Test.startTest();
         
         GetOrderAction.GetOrderRequest request = new GetOrderAction.GetOrderRequest();
@@ -23,8 +35,11 @@ private class GetOrderActionTest {
         System.assertEquals(true, responses[0].success, 'Expected success response');
     }
     
+    /**
+     * @description Tests error handling when order retrieval fails
+     */
     @IsTest
-    static void testGetOrderError() {
+    public static void testGetOrderError() {
         Test.startTest();
         
         // Set up mock to return error
@@ -44,7 +59,7 @@ private class GetOrderActionTest {
     }
     
     @IsTest
-    static void testGetOrderMultiple() {
+    public static void testGetOrderMultiple() {
         Test.startTest();
         
         List<GetOrderAction.GetOrderRequest> requests = new List<GetOrderAction.GetOrderRequest>();

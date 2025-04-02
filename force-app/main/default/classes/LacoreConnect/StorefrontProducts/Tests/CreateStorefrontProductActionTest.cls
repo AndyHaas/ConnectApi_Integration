@@ -1,13 +1,18 @@
+/**
+ * @description Test class for CreateStorefrontProductAction.
+ * This class provides test coverage for creating storefront products,
+ * including successful creation and error handling scenarios.
+ */
 @IsTest
-private class CreateStorefrontProductActionTest {
+public class CreateStorefrontProductActionTest {
     
     @TestSetup
-    static void setup() {
+    public static void setup() {
         // Add any test setup if needed
     }
     
     @IsTest
-    static void testCreateStorefrontProduct() {
+    public static void testCreateStorefrontProduct() {
         Test.startTest();
         
         // Create test request
@@ -40,7 +45,7 @@ private class CreateStorefrontProductActionTest {
     }
     
     @IsTest
-    static void testErrorHandling() {
+    public static void testErrorHandling() {
         Test.startTest();
         
         // Create test request with missing required fields
